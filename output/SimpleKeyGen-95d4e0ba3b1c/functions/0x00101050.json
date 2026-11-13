@@ -1,0 +1,49 @@
+{
+  "name": "printf",
+  "address": "0x00101050",
+  "end_address": "0x00101055",
+  "size_bytes": 6,
+  "instruction_count": 1,
+  "signature": "int printf(char * __format, ...)",
+  "return_type": "int",
+  "parameters": [
+    {
+      "name": "__format",
+      "type": "char *",
+      "storage": "RDI:8"
+    }
+  ],
+  "calling_convention": "unknown",
+  "namespace": "<EXTERNAL>",
+  "is_thunk": true,
+  "callers": [
+    {
+      "name": "usage",
+      "address": "0x00101169"
+    }
+  ],
+  "call_sites": [
+    {
+      "site": "0x00101050",
+      "target": "0x00105018",
+      "target_name": "printf",
+      "target_is_external": false,
+      "target_is_thunk": true,
+      "thunk_target": "printf",
+      "thunk_target_is_external": true
+    }
+  ],
+  "indirect_call_sites": [],
+  "decompiled": {
+    "status": "ok",
+    "c": "\n/* WARNING: Unknown calling convention -- yet parameter storage is locked */\n\nint printf(char *__format,...)\n\n{\n  int iVar1;\n  \n  iVar1 = (*(code *)PTR_printf_00104028)();\n  return iVar1;\n}\n\n",
+    "error": null
+  },
+  "assembly": [
+    {
+      "address": "0x00101050",
+      "bytes": "ff25d22f0000",
+      "text": "JMP qword ptr [0x00104028]"
+    }
+  ]
+}

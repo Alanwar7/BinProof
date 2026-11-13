@@ -1,0 +1,33 @@
+{
+  "name": "FUN_00101020",
+  "address": "0x00101020",
+  "end_address": "0x0010102b",
+  "size_bytes": 12,
+  "instruction_count": 2,
+  "signature": "undefined FUN_00101020()",
+  "return_type": "undefined",
+  "parameters": [],
+  "calling_convention": "unknown",
+  "namespace": "Global",
+  "is_thunk": false,
+  "callers": [],
+  "call_sites": [],
+  "indirect_call_sites": [],
+  "decompiled": {
+    "status": "ok",
+    "c": "\nvoid FUN_00101020(void)\n\n{\n  (*(code *)PTR_00104010)();\n  return;\n}\n\n",
+    "error": null
+  },
+  "assembly": [
+    {
+      "address": "0x00101020",
+      "bytes": "ff35e22f0000",
+      "text": "PUSH qword ptr [0x00104008]"
+    },
+    {
+      "address": "0x00101026",
+      "bytes": "ff25e42f0000",
+      "text": "JMP qword ptr [0x00104010]"
+    }
+  ]
+}

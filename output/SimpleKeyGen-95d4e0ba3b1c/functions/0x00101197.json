@@ -1,0 +1,277 @@
+{
+  "name": "checkSerial",
+  "address": "0x00101197",
+  "end_address": "0x00101225",
+  "size_bytes": 143,
+  "instruction_count": 46,
+  "signature": "undefined checkSerial()",
+  "return_type": "undefined",
+  "parameters": [],
+  "calling_convention": "unknown",
+  "namespace": "Global",
+  "is_thunk": false,
+  "callers": [
+    {
+      "name": "main",
+      "address": "0x00101226"
+    }
+  ],
+  "call_sites": [
+    {
+      "site": "0x001011ab",
+      "target": "0x00101040",
+      "target_name": "strlen",
+      "target_is_external": false,
+      "target_is_thunk": true,
+      "thunk_target": "strlen",
+      "thunk_target_is_external": true
+    },
+    {
+      "site": "0x00101210",
+      "target": "0x00101040",
+      "target_name": "strlen",
+      "target_is_external": false,
+      "target_is_thunk": true,
+      "thunk_target": "strlen",
+      "thunk_target_is_external": true
+    }
+  ],
+  "indirect_call_sites": [],
+  "decompiled": {
+    "status": "ok",
+    "c": "\nundefined8 checkSerial(char *param_1)\n\n{\n  size_t sVar1;\n  undefined8 uVar2;\n  int local_1c;\n  \n  sVar1 = strlen(param_1);\n  if (sVar1 == 0x10) {\n    for (local_1c = 0; sVar1 = strlen(param_1), (ulong)(long)local_1c < sVar1;\n        local_1c = local_1c + 2) {\n      if ((int)param_1[local_1c] - (int)param_1[(long)local_1c + 1] != -1) {\n        return 0xffffffff;\n      }\n    }\n    uVar2 = 0;\n  }\n  else {\n    uVar2 = 0xffffffff;\n  }\n  return uVar2;\n}\n\n",
+    "error": null
+  },
+  "assembly": [
+    {
+      "address": "0x00101197",
+      "bytes": "55",
+      "text": "PUSH RBP"
+    },
+    {
+      "address": "0x00101198",
+      "bytes": "4889e5",
+      "text": "MOV RBP,RSP"
+    },
+    {
+      "address": "0x0010119b",
+      "bytes": "53",
+      "text": "PUSH RBX"
+    },
+    {
+      "address": "0x0010119c",
+      "bytes": "4883ec28",
+      "text": "SUB RSP,0x28"
+    },
+    {
+      "address": "0x001011a0",
+      "bytes": "48897dd8",
+      "text": "MOV qword ptr [RBP + -0x28],RDI"
+    },
+    {
+      "address": "0x001011a4",
+      "bytes": "488b45d8",
+      "text": "MOV RAX,qword ptr [RBP + -0x28]"
+    },
+    {
+      "address": "0x001011a8",
+      "bytes": "4889c7",
+      "text": "MOV RDI,RAX"
+    },
+    {
+      "address": "0x001011ab",
+      "bytes": "e890feffff",
+      "text": "CALL 0x00101040"
+    },
+    {
+      "address": "0x001011b0",
+      "bytes": "4883f810",
+      "text": "CMP RAX,0x10"
+    },
+    {
+      "address": "0x001011b4",
+      "bytes": "7407",
+      "text": "JZ 0x001011bd"
+    },
+    {
+      "address": "0x001011b6",
+      "bytes": "b8ffffffff",
+      "text": "MOV EAX,0xffffffff"
+    },
+    {
+      "address": "0x001011bb",
+      "bytes": "eb62",
+      "text": "JMP 0x0010121f"
+    },
+    {
+      "address": "0x001011bd",
+      "bytes": "c745ec00000000",
+      "text": "MOV dword ptr [RBP + -0x14],0x0"
+    },
+    {
+      "address": "0x001011c4",
+      "bytes": "eb3d",
+      "text": "JMP 0x00101203"
+    },
+    {
+      "address": "0x001011c6",
+      "bytes": "8b45ec",
+      "text": "MOV EAX,dword ptr [RBP + -0x14]"
+    },
+    {
+      "address": "0x001011c9",
+      "bytes": "4863d0",
+      "text": "MOVSXD RDX,EAX"
+    },
+    {
+      "address": "0x001011cc",
+      "bytes": "488b45d8",
+      "text": "MOV RAX,qword ptr [RBP + -0x28]"
+    },
+    {
+      "address": "0x001011d0",
+      "bytes": "4801d0",
+      "text": "ADD RAX,RDX"
+    },
+    {
+      "address": "0x001011d3",
+      "bytes": "0fb600",
+      "text": "MOVZX EAX,byte ptr [RAX]"
+    },
+    {
+      "address": "0x001011d6",
+      "bytes": "0fbed0",
+      "text": "MOVSX EDX,AL"
+    },
+    {
+      "address": "0x001011d9",
+      "bytes": "8b45ec",
+      "text": "MOV EAX,dword ptr [RBP + -0x14]"
+    },
+    {
+      "address": "0x001011dc",
+      "bytes": "4898",
+      "text": "CDQE"
+    },
+    {
+      "address": "0x001011de",
+      "bytes": "488d4801",
+      "text": "LEA RCX,[RAX + 0x1]"
+    },
+    {
+      "address": "0x001011e2",
+      "bytes": "488b45d8",
+      "text": "MOV RAX,qword ptr [RBP + -0x28]"
+    },
+    {
+      "address": "0x001011e6",
+      "bytes": "4801c8",
+      "text": "ADD RAX,RCX"
+    },
+    {
+      "address": "0x001011e9",
+      "bytes": "0fb600",
+      "text": "MOVZX EAX,byte ptr [RAX]"
+    },
+    {
+      "address": "0x001011ec",
+      "bytes": "0fbec0",
+      "text": "MOVSX EAX,AL"
+    },
+    {
+      "address": "0x001011ef",
+      "bytes": "29c2",
+      "text": "SUB EDX,EAX"
+    },
+    {
+      "address": "0x001011f1",
+      "bytes": "89d0",
+      "text": "MOV EAX,EDX"
+    },
+    {
+      "address": "0x001011f3",
+      "bytes": "83f8ff",
+      "text": "CMP EAX,-0x1"
+    },
+    {
+      "address": "0x001011f6",
+      "bytes": "7407",
+      "text": "JZ 0x001011ff"
+    },
+    {
+      "address": "0x001011f8",
+      "bytes": "b8ffffffff",
+      "text": "MOV EAX,0xffffffff"
+    },
+    {
+      "address": "0x001011fd",
+      "bytes": "eb20",
+      "text": "JMP 0x0010121f"
+    },
+    {
+      "address": "0x001011ff",
+      "bytes": "8345ec02",
+      "text": "ADD dword ptr [RBP + -0x14],0x2"
+    },
+    {
+      "address": "0x00101203",
+      "bytes": "8b45ec",
+      "text": "MOV EAX,dword ptr [RBP + -0x14]"
+    },
+    {
+      "address": "0x00101206",
+      "bytes": "4863d8",
+      "text": "MOVSXD RBX,EAX"
+    },
+    {
+      "address": "0x00101209",
+      "bytes": "488b45d8",
+      "text": "MOV RAX,qword ptr [RBP + -0x28]"
+    },
+    {
+      "address": "0x0010120d",
+      "bytes": "4889c7",
+      "text": "MOV RDI,RAX"
+    },
+    {
+      "address": "0x00101210",
+      "bytes": "e82bfeffff",
+      "text": "CALL 0x00101040"
+    },
+    {
+      "address": "0x00101215",
+      "bytes": "4839c3",
+      "text": "CMP RBX,RAX"
+    },
+    {
+      "address": "0x00101218",
+      "bytes": "72ac",
+      "text": "JC 0x001011c6"
+    },
+    {
+      "address": "0x0010121a",
+      "bytes": "b800000000",
+      "text": "MOV EAX,0x0"
+    },
+    {
+      "address": "0x0010121f",
+      "bytes": "4883c428",
+      "text": "ADD RSP,0x28"
+    },
+    {
+      "address": "0x00101223",
+      "bytes": "5b",
+      "text": "POP RBX"
+    },
+    {
+      "address": "0x00101224",
+      "bytes": "5d",
+      "text": "POP RBP"
+    },
+    {
+      "address": "0x00101225",
+      "bytes": "c3",
+      "text": "RET"
+    }
+  ]
+}

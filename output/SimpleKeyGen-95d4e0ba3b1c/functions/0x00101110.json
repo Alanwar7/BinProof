@@ -1,0 +1,117 @@
+{
+  "name": "__do_global_dtors_aux",
+  "address": "0x00101110",
+  "end_address": "0x00101150",
+  "size_bytes": 55,
+  "instruction_count": 14,
+  "signature": "undefined __do_global_dtors_aux()",
+  "return_type": "undefined",
+  "parameters": [],
+  "calling_convention": "unknown",
+  "namespace": "Global",
+  "is_thunk": false,
+  "callers": [
+    {
+      "name": "__libc_csu_init",
+      "address": "0x00101290"
+    }
+  ],
+  "call_sites": [
+    {
+      "site": "0x00101132",
+      "target": "0x00105040",
+      "target_name": "__cxa_finalize",
+      "target_is_external": false,
+      "target_is_thunk": true,
+      "thunk_target": "__cxa_finalize",
+      "thunk_target_is_external": true
+    },
+    {
+      "site": "0x00101138",
+      "target": "0x001010a0",
+      "target_name": "deregister_tm_clones",
+      "target_is_external": false,
+      "target_is_thunk": false,
+      "thunk_target": null,
+      "thunk_target_is_external": null
+    }
+  ],
+  "indirect_call_sites": [],
+  "decompiled": {
+    "status": "ok",
+    "c": "\nvoid __do_global_dtors_aux(void)\n\n{\n  if (completed_7286 == '\\0') {\n    if (PTR___cxa_finalize_00103ff8 != (undefined *)0x0) {\n      (*(code *)PTR___cxa_finalize_00103ff8)(__dso_handle);\n    }\n    deregister_tm_clones();\n    completed_7286 = 1;\n    return;\n  }\n  return;\n}\n\n",
+    "error": null
+  },
+  "assembly": [
+    {
+      "address": "0x00101110",
+      "bytes": "f30f1efa",
+      "text": "ENDBR64"
+    },
+    {
+      "address": "0x00101114",
+      "bytes": "803d2d2f000000",
+      "text": "CMP byte ptr [0x00104048],0x0"
+    },
+    {
+      "address": "0x0010111b",
+      "bytes": "7533",
+      "text": "JNZ 0x00101150"
+    },
+    {
+      "address": "0x0010111d",
+      "bytes": "55",
+      "text": "PUSH RBP"
+    },
+    {
+      "address": "0x0010111e",
+      "bytes": "48833dd22e000000",
+      "text": "CMP qword ptr [0x00103ff8],0x0"
+    },
+    {
+      "address": "0x00101126",
+      "bytes": "4889e5",
+      "text": "MOV RBP,RSP"
+    },
+    {
+      "address": "0x00101129",
+      "bytes": "740d",
+      "text": "JZ 0x00101138"
+    },
+    {
+      "address": "0x0010112b",
+      "bytes": "488b3d0e2f0000",
+      "text": "MOV RDI,qword ptr [0x00104040]"
+    },
+    {
+      "address": "0x00101132",
+      "bytes": "ff15c02e0000",
+      "text": "CALL qword ptr [0x00103ff8]"
+    },
+    {
+      "address": "0x00101138",
+      "bytes": "e863ffffff",
+      "text": "CALL 0x001010a0"
+    },
+    {
+      "address": "0x0010113d",
+      "bytes": "c605042f000001",
+      "text": "MOV byte ptr [0x00104048],0x1"
+    },
+    {
+      "address": "0x00101144",
+      "bytes": "5d",
+      "text": "POP RBP"
+    },
+    {
+      "address": "0x00101145",
+      "bytes": "c3",
+      "text": "RET"
+    },
+    {
+      "address": "0x00101150",
+      "bytes": "c3",
+      "text": "RET"
+    }
+  ]
+}

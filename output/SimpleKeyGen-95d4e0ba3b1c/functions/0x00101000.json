@@ -1,0 +1,84 @@
+{
+  "name": "_init",
+  "address": "0x00101000",
+  "end_address": "0x0010101a",
+  "size_bytes": 27,
+  "instruction_count": 8,
+  "signature": "int _init(EVP_PKEY_CTX * ctx)",
+  "return_type": "int",
+  "parameters": [
+    {
+      "name": "ctx",
+      "type": "EVP_PKEY_CTX *",
+      "storage": "RDI:8"
+    }
+  ],
+  "calling_convention": "__stdcall",
+  "namespace": "Global",
+  "is_thunk": false,
+  "callers": [
+    {
+      "name": "__libc_csu_init",
+      "address": "0x00101290"
+    }
+  ],
+  "call_sites": [
+    {
+      "site": "0x00101014",
+      "target": "0x00105028",
+      "target_name": "__gmon_start__",
+      "target_is_external": false,
+      "target_is_thunk": true,
+      "thunk_target": "__gmon_start__",
+      "thunk_target_is_external": true
+    }
+  ],
+  "indirect_call_sites": [],
+  "decompiled": {
+    "status": "ok",
+    "c": "\nint _init(EVP_PKEY_CTX *ctx)\n\n{\n  int iVar1;\n  \n  iVar1 = 0;\n  if (PTR___gmon_start___00103fe8 != (undefined *)0x0) {\n    iVar1 = (*(code *)PTR___gmon_start___00103fe8)();\n  }\n  return iVar1;\n}\n\n",
+    "error": null
+  },
+  "assembly": [
+    {
+      "address": "0x00101000",
+      "bytes": "f30f1efa",
+      "text": "ENDBR64"
+    },
+    {
+      "address": "0x00101004",
+      "bytes": "4883ec08",
+      "text": "SUB RSP,0x8"
+    },
+    {
+      "address": "0x00101008",
+      "bytes": "488b05d92f0000",
+      "text": "MOV RAX,qword ptr [0x00103fe8]"
+    },
+    {
+      "address": "0x0010100f",
+      "bytes": "4885c0",
+      "text": "TEST RAX,RAX"
+    },
+    {
+      "address": "0x00101012",
+      "bytes": "7402",
+      "text": "JZ 0x00101016"
+    },
+    {
+      "address": "0x00101014",
+      "bytes": "ffd0",
+      "text": "CALL RAX"
+    },
+    {
+      "address": "0x00101016",
+      "bytes": "4883c408",
+      "text": "ADD RSP,0x8"
+    },
+    {
+      "address": "0x0010101a",
+      "bytes": "c3",
+      "text": "RET"
+    }
+  ]
+}

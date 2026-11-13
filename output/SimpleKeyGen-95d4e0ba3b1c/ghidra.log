@@ -1,0 +1,52 @@
+openjdk version "25.0.4" 2026-07-21
+OpenJDK Runtime Environment (build 25.0.4+7-1-Debian)
+OpenJDK 64-Bit Server VM (build 25.0.4+7-1-Debian, mixed mode)
+INFO  Using log config file: jar:file:/usr/share/ghidra/Ghidra/Framework/Generic/lib/Generic.jar!/generic.log4j.xml (LoggingInitialization)  
+INFO  Using log file: /home/alanwar/.config/ghidra/ghidra_12.1.2_DEV/application.log (LoggingInitialization)  
+INFO  Loading user preferences: /home/alanwar/.config/ghidra/ghidra_12.1.2_DEV/preferences (Preferences)  
+INFO  Searching for classes... (ClassSearcher)  
+INFO  Class search complete (1113 ms) (ClassSearcher)  
+INFO  Initializing SSL Context (DefaultSSLContextInitializer)  
+INFO  Initializing Random Number Generator... (SecureRandomFactory)  
+INFO  Random Number Generator initialization complete: NativePRNGNonBlocking (SecureRandomFactory)  
+INFO  Trust manager disabled, cacerts have not been set (DefaultTrustManagerFactory)  
+INFO  Headless startup complete (6845 ms) (AnalyzeHeadless)  
+INFO  Class searcher loaded 59 extension points (20 false positives) (ClassSearcher)  
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::staticFieldOffset has been called by org.apache.felix.framework.util.SecureAction (file:/usr/share/ghidra/Ghidra/Features/Base/lib/org.apache.felix.framework-7.0.5.jar)
+WARNING: Please consider reporting this to the maintainers of class org.apache.felix.framework.util.SecureAction
+WARNING: sun.misc.Unsafe::staticFieldOffset will be removed in a future release
+WARN  REPORT: Could not find -scriptPath entry, skipping: /home/alanwar/Projects/BinaryLens/ghidra_scripts (HeadlessAnalyzer)  
+INFO  HEADLESS Script Paths:
+    /usr/share/ghidra/Ghidra/Processors/8051/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/DecompilerDependent/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/GnuDemangler/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/BytePatterns/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/FileFormats/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/Base/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/PDB/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/WildcardAssembler/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Processors/Atmel/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Processors/JVM/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/SwiftDemangler/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Processors/DATA/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/SystemEmulation/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/BSim/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/PyGhidra/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/Decompiler/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/MicrosoftCodeAnalyzer/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Debug/Debugger-rmi-trace/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/FunctionID/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Features/VersionTracking/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Debug/Debugger/ghidra_scripts
+    /usr/share/ghidra/Ghidra/Processors/PIC/ghidra_scripts (HeadlessAnalyzer)  
+ERROR REPORT SCRIPT ERROR: ExportBinaryJSON.py : Script not found: ExportBinaryJSON.py (HeadlessAnalyzer)  
+ERROR Abort due to Headless analyzer error: Invalid script: ExportBinaryJSON.py (HeadlessAnalyzer) java.lang.IllegalArgumentException: Invalid script: ExportBinaryJSON.py
+	at ghidra.app.util.headless.HeadlessAnalyzer.checkScript(HeadlessAnalyzer.java:811)
+	at ghidra.app.util.headless.HeadlessAnalyzer.checkScriptsList(HeadlessAnalyzer.java:824)
+	at ghidra.app.util.headless.HeadlessAnalyzer.compileScripts(HeadlessAnalyzer.java:858)
+	at ghidra.app.util.headless.HeadlessAnalyzer.processLocal(HeadlessAnalyzer.java:427)
+	at ghidra.app.util.headless.AnalyzeHeadless.launch(AnalyzeHeadless.java:199)
+	at ghidra.GhidraLauncher.launch(GhidraLauncher.java:81)
+	at ghidra.Ghidra.main(Ghidra.java:54)
+ 

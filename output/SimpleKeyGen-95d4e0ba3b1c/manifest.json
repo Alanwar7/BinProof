@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1",
+  "program_name": "SimpleKeyGen",
+  "complete": true,
+  "counts": {
+    "functions": 26,
+    "functions_truncated": false,
+    "strings": 79,
+    "imports": 9
+  },
+  "max_functions": 50,
+  "errors": [],
+  "elapsed_seconds": 0.81,
+  "files": [
+    "metadata.json",
+    "functions.json",
+    "functions/",
+    "strings.json",
+    "imports.json",
+    "xrefs.json",
+    "call_graph.json"
+  ]
+}

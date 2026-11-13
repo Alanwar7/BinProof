@@ -1,0 +1,669 @@
+{
+  "truncated": false,
+  "xrefs": {
+    "0x00101000": {
+      "name": "_init",
+      "references_to": [
+        {
+          "from": "0x001000f8",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x000002d0",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00103e10",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x001012bc",
+          "from_function": {
+            "name": "__libc_csu_init",
+            "address": "0x00101290"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101020": {
+      "name": "FUN_00101020",
+      "references_to": [
+        {
+          "from": "0x00000310",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00102034",
+          "from_function": null,
+          "type": "INDIRECTION",
+          "is_call": false
+        },
+        {
+          "from": "0x001020a8",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x0010103b",
+          "from_function": null,
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x0010104b",
+          "from_function": null,
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x0010105b",
+          "from_function": null,
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x0010106b",
+          "from_function": null,
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101030": {
+      "name": "puts",
+      "references_to": [
+        {
+          "from": "0x00101268",
+          "from_function": {
+            "name": "main",
+            "address": "0x00101226"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x0010127b",
+          "from_function": {
+            "name": "main",
+            "address": "0x00101226"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101040": {
+      "name": "strlen",
+      "references_to": [
+        {
+          "from": "0x001011ab",
+          "from_function": {
+            "name": "checkSerial",
+            "address": "0x00101197"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x00101210",
+          "from_function": {
+            "name": "checkSerial",
+            "address": "0x00101197"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101050": {
+      "name": "printf",
+      "references_to": [
+        {
+          "from": "0x00101188",
+          "from_function": {
+            "name": "usage",
+            "address": "0x00101169"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101060": {
+      "name": "exit",
+      "references_to": [
+        {
+          "from": "0x00101192",
+          "from_function": {
+            "name": "usage",
+            "address": "0x00101169"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101070": {
+      "name": "_start",
+      "references_to": [
+        {
+          "from": "0x00000350",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x00100018",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x0010203c",
+          "from_function": null,
+          "type": "INDIRECTION",
+          "is_call": false
+        },
+        {
+          "from": "0x00102090",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        }
+      ]
+    },
+    "0x001010a0": {
+      "name": "deregister_tm_clones",
+      "references_to": [
+        {
+          "from": "0x00101138",
+          "from_function": {
+            "name": "__do_global_dtors_aux",
+            "address": "0x00101110"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x001010d0": {
+      "name": "register_tm_clones",
+      "references_to": [
+        {
+          "from": "0x00101164",
+          "from_function": {
+            "name": "frame_dummy",
+            "address": "0x00101160"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101110": {
+      "name": "__do_global_dtors_aux",
+      "references_to": [
+        {
+          "from": "0x00103df0",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x001012d9",
+          "from_function": {
+            "name": "__libc_csu_init",
+            "address": "0x00101290"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101160": {
+      "name": "frame_dummy",
+      "references_to": [
+        {
+          "from": "0x00103de8",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x001012d9",
+          "from_function": {
+            "name": "__libc_csu_init",
+            "address": "0x00101290"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101169": {
+      "name": "usage",
+      "references_to": [
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x00102044",
+          "from_function": null,
+          "type": "INDIRECTION",
+          "is_call": false
+        },
+        {
+          "from": "0x001020d0",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101245",
+          "from_function": {
+            "name": "main",
+            "address": "0x00101226"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101197": {
+      "name": "checkSerial",
+      "references_to": [
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x0010204c",
+          "from_function": null,
+          "type": "INDIRECTION",
+          "is_call": false
+        },
+        {
+          "from": "0x001020ec",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101258",
+          "from_function": {
+            "name": "main",
+            "address": "0x00101226"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00101226": {
+      "name": "main",
+      "references_to": [
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x00102054",
+          "from_function": null,
+          "type": "INDIRECTION",
+          "is_call": false
+        },
+        {
+          "from": "0x00102110",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101091",
+          "from_function": {
+            "name": "_start",
+            "address": "0x00101070"
+          },
+          "type": "DATA",
+          "is_call": false
+        }
+      ]
+    },
+    "0x00101290": {
+      "name": "__libc_csu_init",
+      "references_to": [
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x0010205c",
+          "from_function": null,
+          "type": "INDIRECTION",
+          "is_call": false
+        },
+        {
+          "from": "0x00102130",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x0010108a",
+          "from_function": {
+            "name": "_start",
+            "address": "0x00101070"
+          },
+          "type": "DATA",
+          "is_call": false
+        }
+      ]
+    },
+    "0x00101300": {
+      "name": "__libc_csu_fini",
+      "references_to": [
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        },
+        {
+          "from": "0x00102064",
+          "from_function": null,
+          "type": "INDIRECTION",
+          "is_call": false
+        },
+        {
+          "from": "0x00102178",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101083",
+          "from_function": {
+            "name": "_start",
+            "address": "0x00101070"
+          },
+          "type": "DATA",
+          "is_call": false
+        }
+      ]
+    },
+    "0x00101308": {
+      "name": "_fini",
+      "references_to": [
+        {
+          "from": "0x00000390",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00103e20",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00000000",
+          "from_function": null,
+          "type": "EXTERNAL",
+          "is_call": false
+        }
+      ]
+    },
+    "0x00105000": {
+      "name": "_ITM_deregisterTMCloneTable",
+      "references_to": [
+        {
+          "from": "0x00103fd8",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x001010b3",
+          "from_function": {
+            "name": "deregister_tm_clones",
+            "address": "0x001010a0"
+          },
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x001010bf",
+          "from_function": {
+            "name": "deregister_tm_clones",
+            "address": "0x001010a0"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00105008": {
+      "name": "puts",
+      "references_to": [
+        {
+          "from": "0x00104018",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101030",
+          "from_function": {
+            "name": "puts",
+            "address": "0x00101030"
+          },
+          "type": "COMPUTED_CALL_TERMINATOR",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00105010": {
+      "name": "strlen",
+      "references_to": [
+        {
+          "from": "0x00104020",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101040",
+          "from_function": {
+            "name": "strlen",
+            "address": "0x00101040"
+          },
+          "type": "COMPUTED_CALL_TERMINATOR",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00105018": {
+      "name": "printf",
+      "references_to": [
+        {
+          "from": "0x00104028",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101050",
+          "from_function": {
+            "name": "printf",
+            "address": "0x00101050"
+          },
+          "type": "COMPUTED_CALL_TERMINATOR",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00105020": {
+      "name": "__libc_start_main",
+      "references_to": [
+        {
+          "from": "0x00103fe0",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101098",
+          "from_function": {
+            "name": "_start",
+            "address": "0x00101070"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00105028": {
+      "name": "__gmon_start__",
+      "references_to": [
+        {
+          "from": "0x00103fe8",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101014",
+          "from_function": {
+            "name": "_init",
+            "address": "0x00101000"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x00101008",
+          "from_function": {
+            "name": "_init",
+            "address": "0x00101000"
+          },
+          "type": "DATA",
+          "is_call": false
+        }
+      ]
+    },
+    "0x00105030": {
+      "name": "exit",
+      "references_to": [
+        {
+          "from": "0x00104030",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101060",
+          "from_function": {
+            "name": "exit",
+            "address": "0x00101060"
+          },
+          "type": "COMPUTED_CALL_TERMINATOR",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00105038": {
+      "name": "_ITM_registerTMCloneTable",
+      "references_to": [
+        {
+          "from": "0x00103ff0",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x001010f4",
+          "from_function": {
+            "name": "register_tm_clones",
+            "address": "0x001010d0"
+          },
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101100",
+          "from_function": {
+            "name": "register_tm_clones",
+            "address": "0x001010d0"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ]
+    },
+    "0x00105040": {
+      "name": "__cxa_finalize",
+      "references_to": [
+        {
+          "from": "0x00103ff8",
+          "from_function": null,
+          "type": "DATA",
+          "is_call": false
+        },
+        {
+          "from": "0x00101132",
+          "from_function": {
+            "name": "__do_global_dtors_aux",
+            "address": "0x00101110"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ]
+    }
+  }
+}

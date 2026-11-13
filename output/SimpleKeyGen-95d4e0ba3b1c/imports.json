@@ -1,0 +1,341 @@
+{
+  "imports": [
+    {
+      "library": "<EXTERNAL>",
+      "name": "puts",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00101030",
+        "0x00105008"
+      ],
+      "call_sites": [
+        {
+          "from": "0x00101268",
+          "from_function": {
+            "name": "main",
+            "address": "0x00101226"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x0010127b",
+          "from_function": {
+            "name": "main",
+            "address": "0x00101226"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x00101030",
+          "from_function": {
+            "name": "puts",
+            "address": "0x00101030"
+          },
+          "type": "COMPUTED_CALL_TERMINATOR",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105008",
+          "from_function": {
+            "name": "puts",
+            "address": "0x00105008"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    },
+    {
+      "library": "<EXTERNAL>",
+      "name": "strlen",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00101040",
+        "0x00105010"
+      ],
+      "call_sites": [
+        {
+          "from": "0x001011ab",
+          "from_function": {
+            "name": "checkSerial",
+            "address": "0x00101197"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x00101210",
+          "from_function": {
+            "name": "checkSerial",
+            "address": "0x00101197"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x00101040",
+          "from_function": {
+            "name": "strlen",
+            "address": "0x00101040"
+          },
+          "type": "COMPUTED_CALL_TERMINATOR",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105010",
+          "from_function": {
+            "name": "strlen",
+            "address": "0x00105010"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    },
+    {
+      "library": "<EXTERNAL>",
+      "name": "printf",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00101050",
+        "0x00105018"
+      ],
+      "call_sites": [
+        {
+          "from": "0x00101188",
+          "from_function": {
+            "name": "usage",
+            "address": "0x00101169"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x00101050",
+          "from_function": {
+            "name": "printf",
+            "address": "0x00101050"
+          },
+          "type": "COMPUTED_CALL_TERMINATOR",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105018",
+          "from_function": {
+            "name": "printf",
+            "address": "0x00105018"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    },
+    {
+      "library": "<EXTERNAL>",
+      "name": "__libc_start_main",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00105020"
+      ],
+      "call_sites": [
+        {
+          "from": "0x00101098",
+          "from_function": {
+            "name": "_start",
+            "address": "0x00101070"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105020",
+          "from_function": {
+            "name": "__libc_start_main",
+            "address": "0x00105020"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    },
+    {
+      "library": "<EXTERNAL>",
+      "name": "exit",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00101060",
+        "0x00105030"
+      ],
+      "call_sites": [
+        {
+          "from": "0x00101192",
+          "from_function": {
+            "name": "usage",
+            "address": "0x00101169"
+          },
+          "type": "UNCONDITIONAL_CALL",
+          "is_call": true
+        },
+        {
+          "from": "0x00101060",
+          "from_function": {
+            "name": "exit",
+            "address": "0x00101060"
+          },
+          "type": "COMPUTED_CALL_TERMINATOR",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105030",
+          "from_function": {
+            "name": "exit",
+            "address": "0x00105030"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    },
+    {
+      "library": "<EXTERNAL>",
+      "name": "__cxa_finalize",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00105040"
+      ],
+      "call_sites": [
+        {
+          "from": "0x00101132",
+          "from_function": {
+            "name": "__do_global_dtors_aux",
+            "address": "0x00101110"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105040",
+          "from_function": {
+            "name": "__cxa_finalize",
+            "address": "0x00105040"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    },
+    {
+      "library": "<EXTERNAL>",
+      "name": "_ITM_deregisterTMCloneTable",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00105000"
+      ],
+      "call_sites": [
+        {
+          "from": "0x001010bf",
+          "from_function": {
+            "name": "deregister_tm_clones",
+            "address": "0x001010a0"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105000",
+          "from_function": {
+            "name": "_ITM_deregisterTMCloneTable",
+            "address": "0x00105000"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    },
+    {
+      "library": "<EXTERNAL>",
+      "name": "_ITM_registerTMCloneTable",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00105038"
+      ],
+      "call_sites": [
+        {
+          "from": "0x00101100",
+          "from_function": {
+            "name": "register_tm_clones",
+            "address": "0x001010d0"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105038",
+          "from_function": {
+            "name": "_ITM_registerTMCloneTable",
+            "address": "0x00105038"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    },
+    {
+      "library": "<EXTERNAL>",
+      "name": "__gmon_start__",
+      "original_name": null,
+      "address": null,
+      "thunks": [
+        "0x00105028"
+      ],
+      "call_sites": [
+        {
+          "from": "0x00101014",
+          "from_function": {
+            "name": "_init",
+            "address": "0x00101000"
+          },
+          "type": "COMPUTED_CALL",
+          "is_call": true
+        }
+      ],
+      "other_references": [
+        {
+          "from": "0x00105028",
+          "from_function": {
+            "name": "__gmon_start__",
+            "address": "0x00105028"
+          },
+          "type": "THUNK",
+          "is_call": false
+        }
+      ]
+    }
+  ]
+}
