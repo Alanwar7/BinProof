@@ -1,7 +1,6 @@
 # BinProof
 
-AI-assisted, evidence-checked reverse engineering on top of Ghidra.
-(Formerly BinaryLens.)
+BinProof is an open-source, AI-assisted reverse engineering tool built around Ghidra. It extracts and organizes binary information, including functions, assembly, decompiled code, strings, imports, cross-references and call relationships. It uses this structured data to help AI models analyze function behavior and generate evidence-backed explanations, with the goal of making binary analysis more accessible, structured and reliable.
 
 ## Milestone 1: extraction
 ```bash
