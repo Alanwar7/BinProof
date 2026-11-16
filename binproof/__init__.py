@@ -13,4 +13,4 @@ from .analysis import Analysis
 from .errors import *  # noqa: F401,F403  (exception hierarchy is public API)
 from .models import *  # noqa: F401,F403  (data models are public API)
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"

@@ -1,0 +1,443 @@
+{
+  "schema_version": "1",
+  "validated_at": "2026-11-15T21:06:42+00:00",
+  "function": {
+    "address": "0x00101197",
+    "name": "checkSerial",
+    "signature": "undefined checkSerial()"
+  },
+  "analysis_info": {
+    "provider": "openai-compatible",
+    "model": "gemini-3.5-flash",
+    "created_at": "2026-11-14T15:13:14+00:00",
+    "prompt_version": "1"
+  },
+  "integrity": {
+    "binary_matches": true,
+    "context_reproduced": true,
+    "notes": []
+  },
+  "summary": {
+    "total_claims": 6,
+    "claims_by_status": {
+      "VERIFIED": 6,
+      "PARTIALLY_VERIFIED": 0,
+      "UNVERIFIED": 0,
+      "INVALID_EVIDENCE": 0,
+      "CONTRADICTED": 0
+    },
+    "total_evidence": 14,
+    "evidence_by_status": {
+      "confirmed": 14,
+      "partial": 0,
+      "not_found": 0,
+      "mismatch": 0,
+      "uncheckable": 0
+    },
+    "overconfident_claims": 0,
+    "overall_confidence_claimed": "high",
+    "overall_confidence_note": null
+  },
+  "claims": [
+    {
+      "id": "purpose",
+      "section": "purpose",
+      "statement": "Validates a serial number string by checking that it is 16 characters long and that each character at an even index is followed by a character whose ASCII value is exactly one higher.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "if (sVar1 == 0x10)",
+            "note": "checks if string length is 16"
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "if ((int)param_1[local_1c] - (int)param_1[(long)local_1c + 1] != -1)",
+            "note": "verifies adjacent character pair difference is -1"
+          }
+        ],
+        "confidence": "high",
+        "statement": "Validates a serial number string by checking that it is 16 characters long and that each character at an even index is followed by a character whose ASCII value is exactly one higher."
+      },
+      "evidence": [
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "if (sVar1 == 0x10)",
+          "note": "checks if string length is 16",
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found in the decompiled code",
+          "actual": null,
+          "missing_information": null
+        },
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "if ((int)param_1[local_1c] - (int)param_1[(long)local_1c + 1] != -1)",
+          "note": "verifies adjacent character pair difference is -1",
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found in the decompiled code",
+          "actual": null,
+          "missing_information": null
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[0]",
+      "section": "behavior",
+      "statement": "Measures the length of the input string using strlen and fails if it is not 16 characters.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "call",
+            "address": "0x001011ab",
+            "quote": "CALL 0x00101040",
+            "note": "calls thunked strlen"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001011b0",
+            "quote": "CMP RAX,0x10",
+            "note": "compares string length to 16"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001011b6",
+            "quote": "MOV EAX,0xffffffff",
+            "note": "sets failure return value when length check fails"
+          }
+        ],
+        "confidence": "high",
+        "statement": "Measures the length of the input string using strlen and fails if it is not 16 characters."
+      },
+      "evidence": [
+        {
+          "kind": "call",
+          "address": "0x001011ab",
+          "quote": "CALL 0x00101040",
+          "note": "calls thunked strlen",
+          "status": "confirmed",
+          "code": "call_site_confirmed",
+          "reason": "call site confirmed; it calls strlen",
+          "actual": "CALL 0x00101040",
+          "missing_information": null
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001011b0",
+          "quote": "CMP RAX,0x10",
+          "note": "compares string length to 16",
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "CMP RAX,0x10",
+          "missing_information": null
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001011b6",
+          "quote": "MOV EAX,0xffffffff",
+          "note": "sets failure return value when length check fails",
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV EAX,0xffffffff",
+          "missing_information": null
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[1]",
+      "section": "behavior",
+      "statement": "Iterates through the string stepping by 2 bytes and compares each byte at index `i` with byte at `i + 1`.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001011ef",
+            "quote": "SUB EDX,EAX",
+            "note": "subtracts adjacent character value from current character value"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001011f3",
+            "quote": "CMP EAX,-0x1",
+            "note": "checks if difference is -1"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001011ff",
+            "quote": "ADD dword ptr [RBP + -0x14],0x2",
+            "note": "increments loop index by 2"
+          }
+        ],
+        "confidence": "high",
+        "statement": "Iterates through the string stepping by 2 bytes and compares each byte at index `i` with byte at `i + 1`."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x001011ef",
+          "quote": "SUB EDX,EAX",
+          "note": "subtracts adjacent character value from current character value",
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "SUB EDX,EAX",
+          "missing_information": null
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001011f3",
+          "quote": "CMP EAX,-0x1",
+          "note": "checks if difference is -1",
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "CMP EAX,-0x1",
+          "missing_information": null
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001011ff",
+          "quote": "ADD dword ptr [RBP + -0x14],0x2",
+          "note": "increments loop index by 2",
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "ADD dword ptr [RBP + -0x14],0x2",
+          "missing_information": null
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[2]",
+      "section": "behavior",
+      "statement": "Returns 0 if all pair checks pass, or 0xffffffff if any check fails.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001011f8",
+            "quote": "MOV EAX,0xffffffff",
+            "note": "returns -1/0xffffffff on validation failure"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x0010121a",
+            "quote": "MOV EAX,0x0",
+            "note": "returns 0 on successful validation"
+          }
+        ],
+        "confidence": "high",
+        "statement": "Returns 0 if all pair checks pass, or 0xffffffff if any check fails."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x001011f8",
+          "quote": "MOV EAX,0xffffffff",
+          "note": "returns -1/0xffffffff on validation failure",
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV EAX,0xffffffff",
+          "missing_information": null
+        },
+        {
+          "kind": "instruction",
+          "address": "0x0010121a",
+          "quote": "MOV EAX,0x0",
+          "note": "returns 0 on successful validation",
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV EAX,0x0",
+          "missing_information": null
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "inputs[0]",
+      "section": "inputs",
+      "statement": "param_1 (char *): Pointer to a null-terminated serial string passed in register RDI.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001011a0",
+            "quote": "MOV qword ptr [RBP + -0x28],RDI",
+            "note": "stores RDI parameter on stack frame"
+          },
+          {
+            "kind": "parameter",
+            "address": null,
+            "quote": "param_1",
+            "note": "Ghidra parameter decompilation"
+          }
+        ],
+        "confidence": "high",
+        "name": "param_1",
+        "type": "char *",
+        "description": "Pointer to a null-terminated serial string passed in register RDI."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x001011a0",
+          "quote": "MOV qword ptr [RBP + -0x28],RDI",
+          "note": "stores RDI parameter on stack frame",
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV qword ptr [RBP + -0x28],RDI",
+          "missing_information": null
+        },
+        {
+          "kind": "parameter",
+          "address": null,
+          "quote": "param_1",
+          "note": "Ghidra parameter decompilation",
+          "status": "confirmed",
+          "code": "parameter_in_code",
+          "reason": "the name appears in the decompiled code (Ghidra recorded no parameter list for this function)",
+          "actual": null,
+          "missing_information": null
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "outputs[0]",
+      "section": "outputs",
+      "statement": "return value (undefined8): Returns 0 on successful serial validation, or 0xffffffff (-1) if validation fails.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "return 0xffffffff;",
+            "note": "returns 0xffffffff on early mismatch"
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "return uVar2;",
+            "note": "returns uVar2 (0 on success, 0xffffffff on length mismatch)"
+          }
+        ],
+        "confidence": "high",
+        "name": "return value",
+        "type": "undefined8",
+        "description": "Returns 0 on successful serial validation, or 0xffffffff (-1) if validation fails."
+      },
+      "evidence": [
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "return 0xffffffff;",
+          "note": "returns 0xffffffff on early mismatch",
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found in the decompiled code",
+          "actual": null,
+          "missing_information": null
+        },
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "return uVar2;",
+          "note": "returns uVar2 (0 on success, 0xffffffff on length mismatch)",
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found in the decompiled code",
+          "actual": null,
+          "missing_information": null
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    }
+  ],
+  "limitations": [
+    "Deterministic checks show that cited evidence exists in the extracted data and that quotes match it. They do not prove that the interpretation of that evidence is correct.",
+    "VERIFIED means: every cited item exists, matches the data, and passed basic grounding checks. It is not a guarantee that the claim is true.",
+    "Claim-level checks (layer 2) are text heuristics and can miss problems or, rarely, flag harmless wording.",
+    "The extracted data covers direct calls only; indirect calls Ghidra could not resolve are unknown, so callee and caller claims are only contradicted when the call data is complete.",
+    "Notes written by the model next to evidence are never verified.",
+    "Semantic verification (layer 3) was not run."
+  ]
+}

@@ -46,3 +46,25 @@ Layout (`binproof/ai/`): `providers/` (interface, Anthropic, OpenAI-compatible, 
 
 Every finding in the output carries evidence (address + exact quote) and a confidence level. Evidence is NOT yet
 verified against the binary; that is the next milestone. Data sent to the model contains no local file paths.
+
+## Milestone 4: evidence validation
+```bash
+python -m binproof analyze output/<export-dir> -f 0x401100 -o result.json     # produce a result
+python -m binproof validate output/<export-dir> -r result.json [-o report.json] [--json] [--fail-on partial]
+```
+No model call is made: validation compares the AI result with the extracted data. It works in three separate layers,
+reported separately in every claim:
+
+1. **Evidence checks** (`validation/evidence.py`): does each cited address / instruction / call site / string / import /
+   xref / code fragment exist, belong to this function, and match its quote?
+2. **Claim checks** (`validation/support.py`): are constants and addresses in the claim text grounded; do "calls X" /
+   "called by X" claims match the real callee and caller sets? (text heuristics)
+3. **Semantic checks** (`validation/semantic.py`): interface only. Plug in a `SemanticVerifier` to judge whether evidence
+   actually supports a claim; `RecordValidator(analysis, semantic_verifier=...)`.
+
+Claim statuses: `VERIFIED`, `PARTIALLY_VERIFIED`, `UNVERIFIED`, `INVALID_EVIDENCE`, and `CONTRADICTED` (extracted data
+refutes the claim). VERIFIED means the evidence is real and grounded, never that the interpretation is proven.
+`--fail-on invalid|unverified|partial` makes the command exit 1 for scripts.
+
+Test data: `tests/data/checkserial_result.json` is a real Gemini result. `tests/checkserial_fixture.py` is a
+RECONSTRUCTED export consistent with it (not real Ghidra output); swap in a real export when convenient.

@@ -132,6 +132,32 @@ def _cmd_analyze(a: Analysis, args) -> None:
     print(record.model_dump_json(indent=2) if args.json else render_text(record))
 
 
+def _cmd_validate(a: Analysis, args) -> int:
+    try:
+        from .validation import RecordValidator, load_record, render_report
+        from .validation.models import ClaimStatus, severity
+    except ImportError as exc:
+        if getattr(exc, "name", None) == "pydantic":
+            raise BinProofError("validation needs pydantic: pip install 'binproof[ai]'") from None
+        raise
+
+    report = RecordValidator(a).validate(load_record(args.result))
+    if args.output:
+        try:
+            with open(args.output, "w", encoding="utf-8") as fh:
+                fh.write(report.model_dump_json(indent=2) + "\n")
+        except OSError as exc:
+            raise BinProofError("cannot write %s: %s" % (args.output, exc.strerror or exc)) from None
+        print("Saved validation report to %s" % args.output, file=sys.stderr)
+    print(report.model_dump_json(indent=2) if args.json else render_report(report))
+
+    threshold = {"invalid": ClaimStatus.INVALID_EVIDENCE, "unverified": ClaimStatus.UNVERIFIED,
+                 "partial": ClaimStatus.PARTIALLY_VERIFIED}.get(args.fail_on)
+    if threshold and any(severity(c.status) >= severity(threshold) for c in report.claims):
+        return 1
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("directory", help="export directory (contains manifest.json)")
@@ -174,6 +200,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--json", action="store_true", help="print the structured result as JSON")
     p.add_argument("--output", "-o", metavar="FILE", help="also save the structured result as JSON")
     p.add_argument("--show-prompt", action="store_true", help="print the prompt and exit; sends nothing")
+    p = add("validate", _cmd_validate, "check a saved AI analysis result against the extracted data (no model call)")
+    p.add_argument("--result", "-r", required=True, metavar="FILE", help="JSON saved by `analyze --output`")
+    p.add_argument("--output", "-o", metavar="FILE", help="save the validation report as JSON")
+    p.add_argument("--json", action="store_true", help="print the report as JSON instead of text")
+    p.add_argument("--fail-on", choices=["never", "invalid", "unverified", "partial"], default="never",
+                   help="exit 1 if any claim is at least this bad (default: never)")
     return ap
 
 
@@ -182,11 +214,11 @@ def main(argv: Optional[List[str]] = None) -> int:
     try:
         analysis = Analysis.open(args.directory, strict=args.strict,
                                  allow_incomplete=args.allow_incomplete)
-        args.func(analysis, args)
+        rc = args.func(analysis, args)
         if args.command != "inspect" and analysis.problems:
             print("\n%d problem(s) while loading; run `inspect` for details" % len(analysis.problems),
                   file=sys.stderr)
-        return 0
+        return rc or 0
     except BinProofError as exc:
         print("error: %s" % exc, file=sys.stderr)
         return 2

@@ -1,0 +1,157 @@
+{
+  "schema_version": "1",
+  "function": {
+    "address": "0x00101197",
+    "name": "checkSerial",
+    "signature": "undefined checkSerial()"
+  },
+  "analysis": {
+    "purpose": {
+      "evidence": [
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "if (sVar1 == 0x10)",
+          "note": "checks if string length is 16"
+        },
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "if ((int)param_1[local_1c] - (int)param_1[(long)local_1c + 1] != -1)",
+          "note": "verifies adjacent character pair difference is -1"
+        }
+      ],
+      "confidence": "high",
+      "statement": "Validates a serial number string by checking that it is 16 characters long and that each character at an even index is followed by a character whose ASCII value is exactly one higher."
+    },
+    "behavior": [
+      {
+        "evidence": [
+          {
+            "kind": "call",
+            "address": "0x001011ab",
+            "quote": "CALL 0x00101040",
+            "note": "calls thunked strlen"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001011b0",
+            "quote": "CMP RAX,0x10",
+            "note": "compares string length to 16"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001011b6",
+            "quote": "MOV EAX,0xffffffff",
+            "note": "sets failure return value when length check fails"
+          }
+        ],
+        "confidence": "high",
+        "statement": "Measures the length of the input string using strlen and fails if it is not 16 characters."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001011ef",
+            "quote": "SUB EDX,EAX",
+            "note": "subtracts adjacent character value from current character value"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001011f3",
+            "quote": "CMP EAX,-0x1",
+            "note": "checks if difference is -1"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001011ff",
+            "quote": "ADD dword ptr [RBP + -0x14],0x2",
+            "note": "increments loop index by 2"
+          }
+        ],
+        "confidence": "high",
+        "statement": "Iterates through the string stepping by 2 bytes and compares each byte at index `i` with byte at `i + 1`."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001011f8",
+            "quote": "MOV EAX,0xffffffff",
+            "note": "returns -1/0xffffffff on validation failure"
+          },
+          {
+            "kind": "instruction",
+            "address": "0x0010121a",
+            "quote": "MOV EAX,0x0",
+            "note": "returns 0 on successful validation"
+          }
+        ],
+        "confidence": "high",
+        "statement": "Returns 0 if all pair checks pass, or 0xffffffff if any check fails."
+      }
+    ],
+    "inputs": [
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001011a0",
+            "quote": "MOV qword ptr [RBP + -0x28],RDI",
+            "note": "stores RDI parameter on stack frame"
+          },
+          {
+            "kind": "parameter",
+            "address": null,
+            "quote": "param_1",
+            "note": "Ghidra parameter decompilation"
+          }
+        ],
+        "confidence": "high",
+        "name": "param_1",
+        "type": "char *",
+        "description": "Pointer to a null-terminated serial string passed in register RDI."
+      }
+    ],
+    "outputs": [
+      {
+        "evidence": [
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "return 0xffffffff;",
+            "note": "returns 0xffffffff on early mismatch"
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "return uVar2;",
+            "note": "returns uVar2 (0 on success, 0xffffffff on length mismatch)"
+          }
+        ],
+        "confidence": "high",
+        "name": "return value",
+        "type": "undefined8",
+        "description": "Returns 0 on successful serial validation, or 0xffffffff (-1) if validation fails."
+      }
+    ],
+    "side_effects": [],
+    "confidence": "high",
+    "confidence_rationale": "The entire function disassembly and decompilation are visible without external missing dependencies or unresolved jumps/calls.",
+    "uncertainties": []
+  },
+  "context_notes": [],
+  "provenance": {
+    "provider": "openai-compatible",
+    "model": "gemini-3.5-flash",
+    "created_at": "2026-11-14T15:13:14+00:00",
+    "prompt_version": "1",
+    "context_sha256": "0c42e239f3d68c27584c281c8ae405f2fa2047c53b8faaa4eadca1f7cd159d15",
+    "attempts": 1,
+    "input_tokens": 2856,
+    "output_tokens": 1275,
+    "program_name": "SimpleKeyGen",
+    "program_sha256": "95d4e0ba3b1c804e6ad051ef09e242e916bf768661dee835bfec96576839d09c"
+  }
+}
