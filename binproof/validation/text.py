@@ -49,3 +49,50 @@ def number_keys(value: int) -> FrozenSet[int]:
 
 def number_in(value: int, pool: FrozenSet[int]) -> bool:
     return bool(number_keys(value) & pool)
+
+
+_BOILERPLATE = [re.compile(x) for x in (
+    r"^(push|pop)(rbp|ebp|rbx|ebx|rsi|rdi|esi|edi|r1[2-5]d?)$",
+    r"^mov(rbp,rsp|ebp,esp|rsp,rbp|esp,ebp)$",
+    r"^(sub|add)(rsp|esp),(0x)?[0-9a-f]+$",
+    r"^(leave|leaveq|ret|retn|retq|nop|endbr64|endbr32|hlt|int3)$",
+    r"^ret[nq]?(0x)?[0-9a-f]+$",
+    r"^nop.*$",
+)]
+
+
+def is_boilerplate_instruction(text: str) -> bool:
+    """Prologue/epilogue/padding instructions say nothing about what a function does."""
+    c = compact(text)
+    return any(rx.match(c) for rx in _BOILERPLATE)
+
+
+def identifier_like(token: str) -> bool:
+    """Looks like a code identifier (camelCase, snake_case, digits, FUN_...), not an English word."""
+    return ("_" in token or any(ch.isdigit() for ch in token) or bool(re.search(r"[a-z][A-Z]", token))
+            or token.startswith("FUN_"))
+
+
+def compact_with_map(text: str):
+    """compact() plus, for each kept character, its offset in the original text."""
+    chars, idx = [], []
+    for i, ch in enumerate(text):
+        if not ch.isspace():
+            chars.append(ch.lower())
+            idx.append(i)
+    return "".join(chars), idx
+
+
+def find_all(haystack: str, needle: str) -> List[int]:
+    out, start = [], 0
+    while needle:
+        i = haystack.find(needle, start)
+        if i < 0:
+            break
+        out.append(i)
+        start = i + len(needle)
+    return out
+
+
+def line_of(text: str, offset: int) -> int:
+    return text.count("\n", 0, offset) + 1

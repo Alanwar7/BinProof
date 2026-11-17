@@ -151,6 +151,10 @@ def _cmd_validate(a: Analysis, args) -> int:
         print("Saved validation report to %s" % args.output, file=sys.stderr)
     print(report.model_dump_json(indent=2) if args.json else render_report(report))
 
+    if not report.integrity.ok:   # nothing below means anything for the wrong binary
+        print("error: binary hash mismatch: this result was not produced from this export, so its validation "
+              "is meaningless", file=sys.stderr)
+        return 3
     threshold = {"invalid": ClaimStatus.INVALID_EVIDENCE, "unverified": ClaimStatus.UNVERIFIED,
                  "partial": ClaimStatus.PARTIALLY_VERIFIED}.get(args.fail_on)
     if threshold and any(severity(c.status) >= severity(threshold) for c in report.claims):
@@ -205,7 +209,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--output", "-o", metavar="FILE", help="save the validation report as JSON")
     p.add_argument("--json", action="store_true", help="print the report as JSON instead of text")
     p.add_argument("--fail-on", choices=["never", "invalid", "unverified", "partial"], default="never",
-                   help="exit 1 if any claim is at least this bad (default: never)")
+                   help="exit 1 if any claim is at least this bad (default: never). A binary hash mismatch always exits 3")
     return ap
 
 
@@ -222,3 +226,6 @@ def main(argv: Optional[List[str]] = None) -> int:
     except BinProofError as exc:
         print("error: %s" % exc, file=sys.stderr)
         return 2
+    except KeyboardInterrupt:   # Ctrl+C is a normal way to stop, not a crash; nothing partial is ever written
+        print("\ninterrupted", file=sys.stderr)
+        return 130

@@ -72,6 +72,10 @@ class EvidenceCheck(_Model):
     reason: str                           # human-readable explanation
     actual: Optional[str] = None          # what the extracted data really says, when relevant
     missing_information: Optional[str] = None
+    # coordinates for evidence that carries no address of its own (decompiled code):
+    location: Optional[str] = None                 # e.g. "decompiled code line 9"
+    occurrences: Optional[int] = None              # how many times the quote appears in the code
+    corroborating_addresses: List[str] = Field(default_factory=list)  # assembly that matches the fragment
 
 
 class SupportFinding(_Model):
@@ -111,6 +115,7 @@ class AnalysisInfo(_Model):
 
 
 class Integrity(_Model):
+    ok: bool = True                             # False if the result cannot belong to this export
     binary_matches: Optional[bool] = None       # result's program sha256 equals the export's
     context_reproduced: Optional[bool] = None   # model input can be rebuilt byte-for-byte
     notes: List[str] = Field(default_factory=list)

@@ -1,0 +1,374 @@
+{
+  "schema_version": "1",
+  "function": {
+    "address": "0x00101290",
+    "name": "__libc_csu_init",
+    "signature": "undefined __libc_csu_init()"
+  },
+  "analysis": {
+    "purpose": {
+      "evidence": [
+        {
+          "kind": "metadata",
+          "address": null,
+          "quote": "name: __libc_csu_init",
+          "note": "standard GCC/ELF initialization wrapper referenced from _start"
+        },
+        {
+          "kind": "call",
+          "address": "0x001012bc",
+          "quote": "CALL 0x00101000",
+          "note": "calls _init"
+        },
+        {
+          "kind": "call",
+          "address": "0x001012d9",
+          "quote": "CALL qword ptr [R12 + RBX*0x8]",
+          "note": "indirect call to init array entry"
+        },
+        {
+          "kind": "xref",
+          "address": "0x0010108a",
+          "quote": "DATA from 0x0010108a (_start @ 0x00101070)",
+          "note": null
+        }
+      ],
+      "confidence": "high",
+      "statement": "Runs ELF initialization routines by calling _init and then iterating over a function pointer array starting at 0x103de8, forwarding its three parameters to each entry."
+    },
+    "behavior": [
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x00101296",
+            "quote": "MOV R15,RDX",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x0010129b",
+            "quote": "MOV R14,RSI",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012a0",
+            "quote": "MOV R13D,EDI",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012b8",
+            "quote": "SUB RSP,0x8",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Saves callee-saved registers (R15, R14, R13, R12, RBP, RBX), aligns the stack, and preserves the three incoming arguments in R13D, R14, and R15."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012a5",
+            "quote": "LEA R12,[0x103de8]",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012ad",
+            "quote": "LEA RBP,[0x103df0]",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012b5",
+            "quote": "SUB RBP,R12",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Loads the start (0x103de8) and end (0x103df0) addresses of the initialization pointer table into R12 and RBP and computes their byte difference."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "call",
+            "address": "0x001012bc",
+            "quote": "CALL 0x00101000",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "_init(param_1);",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Calls _init at 0x00101000 with param_1 still in RDI/EDI."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012c2",
+            "quote": "SAR RBP,0x3",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012c6",
+            "quote": "JZ 0x001012e6",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Divides the table byte size by 8 (arithmetic right shift by 3) to get the entry count and skips the loop if the count is zero."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012c8",
+            "quote": "XOR EBX,EBX",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012d0",
+            "quote": "MOV RDX,R15",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012d3",
+            "quote": "MOV RSI,R14",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012d6",
+            "quote": "MOV EDI,R13D",
+            "note": null
+          },
+          {
+            "kind": "call",
+            "address": "0x001012d9",
+            "quote": "CALL qword ptr [R12 + RBX*0x8]",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012dd",
+            "quote": "ADD RBX,0x1",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012e1",
+            "quote": "CMP RBP,RBX",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012e4",
+            "quote": "JNZ 0x001012d0",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "while (lVar1 != 1);",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Loops index RBX from 0 until RBX equals RBP (1 iteration according to the decompiler and the 8-byte range), restoring the three arguments into EDI, RSI, and RDX before calling each function pointer at [R12 + RBX*0x8]."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012e6",
+            "quote": "ADD RSP,0x8",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012f4",
+            "quote": "RET",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Restores the stack pointer and saved registers, then returns."
+      }
+    ],
+    "inputs": [
+      {
+        "evidence": [
+          {
+            "kind": "parameter",
+            "address": null,
+            "quote": "param_1",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012a0",
+            "quote": "MOV R13D,EDI",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "(ulong)param_1 & 0xffffffff",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "name": "param_1",
+        "type": "EVP_PKEY_CTX *",
+        "description": "First argument (passed in RDI/EDI); forwarded to _init and truncated to 32 bits (EDI) when forwarded to each init-array function."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "parameter",
+            "address": null,
+            "quote": "param_2",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x0010129b",
+            "quote": "MOV R14,RSI",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "name": "param_2",
+        "type": "undefined8",
+        "description": "Second argument (passed in RSI); forwarded to each init-array function."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "parameter",
+            "address": null,
+            "quote": "param_3",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x00101296",
+            "quote": "MOV R15,RDX",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "name": "param_3",
+        "type": "undefined8",
+        "description": "Third argument (passed in RDX); forwarded to each init-array function."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012a5",
+            "quote": "LEA R12,[0x103de8]",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012ad",
+            "quote": "LEA RBP,[0x103df0]",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "(&__frame_dummy_init_array_entry)[lVar1]",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "name": "__frame_dummy_init_array_entry",
+        "type": "code *[]",
+        "description": "Array of function pointers spanning 0x103de8 to 0x103df0 read during the initialization loop."
+      }
+    ],
+    "outputs": [],
+    "side_effects": [
+      {
+        "evidence": [
+          {
+            "kind": "call",
+            "address": "0x001012bc",
+            "quote": "CALL 0x00101000",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "_init(param_1);",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Invokes _init at 0x00101000 with param_1."
+      },
+      {
+        "evidence": [
+          {
+            "kind": "call",
+            "address": "0x001012d9",
+            "quote": "CALL qword ptr [R12 + RBX*0x8]",
+            "note": null
+          },
+          {
+            "kind": "metadata",
+            "address": null,
+            "quote": "frame_dummy @ 0x00101160 | call sites: 0x001012d9",
+            "note": null
+          },
+          {
+            "kind": "metadata",
+            "address": null,
+            "quote": "__do_global_dtors_aux @ 0x00101110 | call sites: 0x001012d9",
+            "note": null
+          }
+        ],
+        "confidence": "medium",
+        "statement": "Invokes function pointer(s) from the table at 0x103de8 via indirect call at 0x001012d9; Ghidra records frame_dummy (0x00101160) and __do_global_dtors_aux (0x00101110) as callees at this call site."
+      }
+    ],
+    "confidence": "high",
+    "confidence_rationale": "All 34 instructions and the full Ghidra decompilation are present, making the control flow, argument forwarding, and array iteration directly observable.",
+    "uncertainties": [
+      {
+        "description": "Which exact function pointer(s) reside in [0x103de8..0x103df0) and why Ghidra associates two callees (frame_dummy and __do_global_dtors_aux) with 0x001012d9 despite the 8-byte (single-entry) range.",
+        "missing_information": "Raw bytes/relocations of the memory region 0x103de8-0x103df0."
+      },
+      {
+        "description": "What _init, frame_dummy, and __do_global_dtors_aux do internally and what caller values _start passes into param_1, param_2, and param_3.",
+        "missing_information": "Disassembly/decompilation of _start, _init, frame_dummy, and __do_global_dtors_aux."
+      }
+    ]
+  },
+  "context_notes": [],
+  "provenance": {
+    "provider": "openai-compatible",
+    "model": "gemini-4-hydrogen",
+    "created_at": "2026-11-17T22:34:23+00:00",
+    "prompt_version": "1",
+    "context_sha256": "54fa662599c6110c9236966550f19f9c7a254f394138f14fc0e6d8d63a4d4874",
+    "attempts": 1,
+    "input_tokens": 3537,
+    "output_tokens": 3063,
+    "program_name": "SimpleKeyGen",
+    "program_sha256": "95d4e0ba3b1c804e6ad051ef09e242e916bf768661dee835bfec96576839d09c"
+  }
+}

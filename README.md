@@ -23,7 +23,7 @@ a.problems                            # non-fatal issues found while loading
 ```
 CLI: `python -m binproof inspect|functions|function|callers|callees|xrefs|strings|imports <export-dir>`
 
-Tests: `pip install -e '.[dev]' && pytest`
+Tests: `pip install -e '.[dev]' && pytest` (expect 332 passed, 3 xfailed)
 
 Strings, names and decompiled code come from the analyzed binary. Treat them as untrusted data.
 
@@ -65,6 +65,8 @@ reported separately in every claim:
 Claim statuses: `VERIFIED`, `PARTIALLY_VERIFIED`, `UNVERIFIED`, `INVALID_EVIDENCE`, and `CONTRADICTED` (extracted data
 refutes the claim). VERIFIED means the evidence is real and grounded, never that the interpretation is proven.
 `--fail-on invalid|unverified|partial` makes the command exit 1 for scripts.
+
+Full details, the corruption test matrix and the validator's current limitations: [docs/VALIDATION.md](docs/VALIDATION.md). A result from a different binary (hash mismatch) exits with code 3.
 
 Test data: `tests/data/checkserial_result.json` is a real Gemini result. `tests/checkserial_fixture.py` is a
 RECONSTRUCTED export consistent with it (not real Ghidra output); swap in a real export when convenient.

@@ -13,6 +13,8 @@ def render_report(r: ValidationReport) -> str:
     out: List[str] = ["Validation of %s  %s" % (r.function.address, r.function.name), "=" * 72]
     out.append("Analysis by %s / %s at %s" % (r.analysis_info.provider, r.analysis_info.model,
                                               r.analysis_info.created_at))
+    if not r.integrity.ok:
+        out.append("  !! INTEGRITY FAILURE: this result does not belong to this export")
     for note in r.integrity.notes:
         out.append("  ! " + note)
     s = r.summary
@@ -34,6 +36,9 @@ def render_report(r: ValidationReport) -> str:
             out.append("    %s %s%s  %r" % (_MARK[e.status], e.kind.value, where, e.quote[:70]))
             if e.status is not S.CONFIRMED:
                 out.append("         -> %s" % e.reason)
+            elif e.location:
+                extra = "; assembly: " + ", ".join(e.corroborating_addresses) if e.corroborating_addresses else ""
+                out.append("         at %s%s" % (e.location, extra))
         if not c.evidence:
             out.append("    (no evidence provided)")
         for f in c.findings:

@@ -4,22 +4,34 @@ Each evidence item (address + exact quote) is checked for:
   * existence      does the cited address / string / import / reference exist?
   * scope          does it belong to the analyzed function?
   * quote match    does the quote really say what the binary data says?
+  * strength       is the quote specific enough to mean anything?
 It never judges whether the *interpretation* of the evidence is right.
+
+Decompiled code has no addresses, so those checks report a location (line numbers), how
+many times the quote occurs, and which assembly instructions/call sites match the
+fragment's constants and callees (corroborating_addresses).
 """
 
 from __future__ import annotations
 
 import json
 import re
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
-from ..ai.models import Evidence, EvidenceKind
+from ..ai.models import Evidence
 from ..errors import BinProofError, LookupFailedError
 from .facts import FunctionFacts
 from .models import EvidenceCheck, EvidenceStatus as S
-from .text import compact, split_elisions, strip_leading_address
+from .text import (
+    compact, compact_with_map, extract_numbers, find_all, line_of, number_keys, split_elisions,
+    strip_leading_address,
+)
 
-_MIN_CODE_FRAGMENT = 4   # compacted characters
+_MIN_FRAGMENT = 5          # compacted characters: instruction/call fragments
+_MIN_STRING_FRAGMENT = 4   # characters: string fragments
+_MIN_CODE_FRAGMENT = 6     # compacted characters: decompiled fragments
+_GENERIC_CODE = re.compile(r"^(?:[a-z_]\w*|0x[0-9a-f]+|\d+)$")   # a bare identifier or number
+_NOT_CALLS = {"if", "while", "for", "switch", "return", "sizeof", "else", "do"}
 _C_WORDS = {"char", "int", "void", "const", "unsigned", "signed", "long", "short", "struct", "undefined",
             "undefined1", "undefined2", "undefined4", "undefined8", "uint", "ulong", "byte", "bool",
             "size_t", "param", "parameter", "pointer", "ptr", "to", "the", "a", "of", "first", "second"}
@@ -45,9 +57,9 @@ class EvidenceChecker:
     # ---- helpers ------------------------------------------------------------------
 
     def _make(self, ev: Evidence, status: S, code: str, reason: str, actual: Optional[str] = None,
-              missing: Optional[str] = None) -> EvidenceCheck:
+              missing: Optional[str] = None, **extra) -> EvidenceCheck:
         return EvidenceCheck(kind=ev.kind, address=ev.address, quote=ev.quote, note=ev.note, status=status,
-                             code=code, reason=reason, actual=_clip(actual), missing_information=missing)
+                             code=code, reason=reason, actual=_clip(actual), missing_information=missing, **extra)
 
     def _address_not_found(self, ev: Evidence) -> EvidenceCheck:
         owner = self.f.function_containing(ev.address)
@@ -77,8 +89,10 @@ class EvidenceChecker:
         if cq == ca:
             return self._make(ev, S.CONFIRMED, "quote_matches", "quote matches the %s at this address" % what,
                               actual=actual)
-        if len(cq) < 3:
-            return self._make(ev, S.PARTIAL, "quote_too_short", "quote is too short to verify", actual=actual)
+        if len(cq) < _MIN_FRAGMENT:
+            return self._make(ev, S.PARTIAL, "quote_too_short",
+                              "quote %r is too short to prove anything about this %s" % (_clip(q, 40), what),
+                              actual=actual)
         if cq in ca:
             return self._make(ev, S.CONFIRMED, "quote_is_fragment",
                               "quote is a fragment of the %s at this address" % what, actual=actual)
@@ -108,7 +122,7 @@ class EvidenceChecker:
         q = strip_leading_address(ev.quote, ev.address)
         cq = compact(q)
         names = [n for n in ((site.target_name, site.thunk_target, site.target) if site else ()) if n]
-        text_ok = len(cq) >= 3 and cq in compact(ins.text)
+        text_ok = len(cq) >= _MIN_FRAGMENT and cq in compact(ins.text)
         name_ok = any(n.lower() in q.lower() for n in names)
         if site is None:
             if text_ok:
@@ -119,6 +133,10 @@ class EvidenceChecker:
             target = site.thunk_target or site.target_name or site.target
             return self._make(ev, S.CONFIRMED, "call_site_confirmed",
                               "call site confirmed; it calls %s" % target, actual=ins.text)
+        if len(cq) < _MIN_FRAGMENT and cq in compact(ins.text):
+            return self._make(ev, S.PARTIAL, "quote_too_short",
+                              "a call exists at %s, but the quote %r is too short to say which one"
+                              % (ev.address, _clip(q, 40)), actual=ins.text)
         known = ", ".join(names) if names else "an unresolved target"
         return self._make(ev, S.MISMATCH, "call_quote_mismatch",
                           "the call at %s is %r (target: %s), which does not match the quote %r"
@@ -144,7 +162,13 @@ class EvidenceChecker:
         if len(q) >= 2 and q[0] == q[-1] and q[0] in "\"'":
             q = q[1:-1]
         escaped = json.dumps(entry.value)[1:-1]
-        if not (q == entry.value or q == escaped or (len(q) >= 3 and (q in entry.value or q in escaped))):
+        exact = q == entry.value or q == escaped
+        fragment = len(q) >= _MIN_STRING_FRAGMENT and (q in entry.value or q in escaped)
+        if not (exact or fragment):
+            if q and (q in entry.value or q in escaped):
+                return self._make(ev, S.PARTIAL, "quote_too_short",
+                                  "quote %r occurs in the string at %s but is too short to prove anything"
+                                  % (_clip(q, 40), entry.address), actual=entry.value)
             return self._make(ev, S.MISMATCH, "string_value_mismatch",
                               "the string at %s is %r, which does not match the quote %r"
                               % (entry.address, _clip(entry.value, 80), _clip(q, 80)), actual=entry.value)
@@ -221,10 +245,10 @@ class EvidenceChecker:
                               ("%s is inside the analyzed function; it is not a reference to it" if inside
                                else "no reference to this function originates at %s") % ev.address)
         q = compact(ev.quote)
+        call_to_me = re.search(r"\b(?:call|jmp|jump)\b.*\b%s\b" % re.escape(self.f.summary.name), ev.quote, re.I)
         for r in matches:
-            tokens = [r.type, r.from_function.name if r.from_function else None, self.f.summary.name,
-                      r.from_address]
-            if any(t and compact(t) in q for t in tokens):
+            tokens = [r.type, r.from_function.name if r.from_function else None, r.from_address]
+            if call_to_me or any(t and compact(t) in q for t in tokens):
                 who = r.from_function.name if r.from_function else "outside any known function"
                 return self._make(ev, S.CONFIRMED, "xref_confirmed",
                                   "%s reference to this function exists at %s (from %s)" % (r.type, ev.address, who))
@@ -234,6 +258,34 @@ class EvidenceChecker:
 
     # ---- decompiled code ---------------------------------------------------------------------------
 
+    def _corroborate(self, fragment: str) -> Tuple[List[str], bool]:
+        """Assembly that matches a C fragment's constants and callees (addresses, had_features)."""
+        numbers = [v for v in extract_numbers(fragment) if abs(v) > 1]   # 0 and 1 appear everywhere
+        names = [n for n in re.findall(r"\b([A-Za-z_]\w*)\s*\(", fragment) if n not in _NOT_CALLS]
+        found = set()
+        for ins in self.f.detail.assembly:
+            ikeys = set()
+            for v in extract_numbers(ins.text):
+                ikeys |= number_keys(v)
+            if any(number_keys(v) & ikeys for v in numbers):
+                found.add(ins.address)
+        for site in self.f.detail.call_sites:
+            if any(n in (site.target_name, site.thunk_target) for n in names):
+                found.add(site.site)
+        return sorted(found)[:8], bool(numbers or names)
+
+    def _wrong_kind(self, ev: Evidence) -> Optional[EvidenceCheck]:
+        cq = compact(strip_leading_address(ev.quote, None))
+        if len(cq) < _MIN_FRAGMENT:
+            return None
+        for ins in self.f.detail.assembly:
+            if cq == compact(ins.text) or cq in compact(ins.text):
+                return self._make(ev, S.PARTIAL, "wrong_evidence_kind",
+                                  "this quote is an assembly instruction (at %s), not decompiled code; it should "
+                                  "be cited as kind 'instruction'" % ins.address, actual=ins.text,
+                                  corroborating_addresses=[ins.address])
+        return None
+
     def _check_decompiled_code(self, ev: Evidence) -> EvidenceCheck:
         code = self.f.code_text
         if code is None:
@@ -242,19 +294,44 @@ class EvidenceChecker:
                               missing="decompiled code is unavailable (%s)"
                               % (self.f.detail.decompilation.error or "decompiler failed"))
         parts = split_elisions(ev.quote) or [ev.quote]
-        ccode, pos = compact(code), 0
+        ccode, idx = compact_with_map(code)
+        pos, first, last = 0, None, 0
         for part in parts:
             c = compact(part)
-            idx = ccode.find(c, pos) if c else -1
-            if idx < 0:
-                return self._make(ev, S.NOT_FOUND, "fragment_not_in_decompiled_code",
-                                  "this fragment does not appear in the decompiled code: %r" % _clip(part, 80))
-            pos = idx + len(c)
-        result = (self._make(ev, S.PARTIAL, "fragment_too_short", "fragment is too short to be meaningful evidence")
-                  if any(len(compact(p)) < _MIN_CODE_FRAGMENT for p in parts)
-                  else self._make(ev, S.CONFIRMED, "fragment_confirmed",
-                                  "fragment found in the decompiled code"
-                                  + (" (segments in order)" if len(parts) > 1 else "")))
+            i = ccode.find(c, pos) if c else -1
+            if i < 0:
+                return self._wrong_kind(ev) or self._make(
+                    ev, S.NOT_FOUND, "fragment_not_in_decompiled_code",
+                    "this fragment does not appear in the decompiled code: %r" % _clip(part, 80))
+            first = i if first is None else first
+            last, pos = i + len(c) - 1, i + len(c)
+
+        if len(parts) == 1:
+            positions = find_all(ccode, compact(parts[0]))
+            lines = sorted({line_of(code, idx[p]) for p in positions})
+            occurrences = len(positions)
+            location = "decompiled code line%s %s" % ("s" if len(lines) > 1 else "", ", ".join(map(str, lines)))
+        else:
+            occurrences = None
+            lo, hi = line_of(code, idx[first]), line_of(code, idx[last])
+            location = "decompiled code lines %d-%d (segments in order)" % (lo, hi)
+        addresses, had_features = self._corroborate(" ".join(parts))
+
+        if any(len(compact(p)) < _MIN_CODE_FRAGMENT for p in parts):
+            status, rcode, reason = S.PARTIAL, "fragment_too_short", "fragment is too short to be meaningful evidence"
+        elif all(_GENERIC_CODE.match(compact(p)) for p in parts):
+            status, rcode, reason = (S.PARTIAL, "fragment_too_generic",
+                                     "a bare identifier or number says almost nothing about where or why")
+        else:
+            status, rcode, reason = S.CONFIRMED, "fragment_confirmed", "fragment found at %s" % location
+            if occurrences and occurrences > 1:
+                reason += "; it occurs %d times, so the evidence does not say which occurrence is meant" % occurrences
+            if addresses:
+                reason += "; matching assembly at %s" % ", ".join(addresses)
+            elif had_features:
+                reason += "; no assembly instruction or call site matches its constants or callees"
+        result = self._make(ev, status, rcode, reason, location=location, occurrences=occurrences,
+                            corroborating_addresses=addresses)
         return self._soft_address(ev, result)
 
     # ---- parameter ---------------------------------------------------------------------------------
@@ -263,7 +340,7 @@ class EvidenceChecker:
         q = ev.quote.strip()
         params = self.f.detail.parameters
         for p in params:
-            if p.name and p.name in q or (p.storage and p.storage == q):
+            if (p.name and p.name in q) or (p.storage and p.storage == q):
                 return self._soft_address(ev, self._make(ev, S.CONFIRMED, "parameter_confirmed",
                                                          "matches a parameter recorded by Ghidra (%s)" % p.name))
         ids = [w for w in re.findall(r"[A-Za-z_]\w*", q) if w.lower() not in _C_WORDS]
@@ -293,7 +370,12 @@ class EvidenceChecker:
         except BinProofError:
             pass
         cq = compact(ev.quote)
-        if len(cq) >= 3 and any(v and (cq in compact(v) or compact(v) in cq) for v in values if v):
+
+        def matches(v: str) -> bool:
+            cv = compact(v)
+            return cq in cv or (len(cv) >= 4 and cv in cq)   # short values (like "8") prove nothing
+
+        if len(cq) >= 3 and any(matches(v) for v in values if v):
             return self._soft_address(ev, self._make(ev, S.CONFIRMED, "metadata_confirmed",
                                                      "matches recorded function or program metadata"))
         return self._make(ev, S.UNCHECKABLE, "metadata_not_checkable",

@@ -1,0 +1,1279 @@
+{
+  "schema_version": "1",
+  "validated_at": "2026-11-17T22:37:20+00:00",
+  "function": {
+    "address": "0x00101290",
+    "name": "__libc_csu_init",
+    "signature": "undefined __libc_csu_init()"
+  },
+  "analysis_info": {
+    "provider": "openai-compatible",
+    "model": "gemini-4-hydrogen",
+    "created_at": "2026-11-17T22:34:23+00:00",
+    "prompt_version": "1"
+  },
+  "integrity": {
+    "ok": true,
+    "binary_matches": true,
+    "context_reproduced": true,
+    "notes": []
+  },
+  "summary": {
+    "total_claims": 13,
+    "claims_by_status": {
+      "VERIFIED": 10,
+      "PARTIALLY_VERIFIED": 2,
+      "UNVERIFIED": 0,
+      "INVALID_EVIDENCE": 0,
+      "CONTRADICTED": 1
+    },
+    "total_evidence": 41,
+    "evidence_by_status": {
+      "confirmed": 40,
+      "partial": 0,
+      "not_found": 0,
+      "mismatch": 0,
+      "uncheckable": 1
+    },
+    "overconfident_claims": 0,
+    "overall_confidence_claimed": "high",
+    "overall_confidence_note": "overall confidence 'high' is not supported: 3 of 13 claims are not fully verified"
+  },
+  "claims": [
+    {
+      "id": "purpose",
+      "section": "purpose",
+      "statement": "Runs ELF initialization routines by calling _init and then iterating over a function pointer array starting at 0x103de8, forwarding its three parameters to each entry.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "metadata",
+            "address": null,
+            "quote": "name: __libc_csu_init",
+            "note": "standard GCC/ELF initialization wrapper referenced from _start"
+          },
+          {
+            "kind": "call",
+            "address": "0x001012bc",
+            "quote": "CALL 0x00101000",
+            "note": "calls _init"
+          },
+          {
+            "kind": "call",
+            "address": "0x001012d9",
+            "quote": "CALL qword ptr [R12 + RBX*0x8]",
+            "note": "indirect call to init array entry"
+          },
+          {
+            "kind": "xref",
+            "address": "0x0010108a",
+            "quote": "DATA from 0x0010108a (_start @ 0x00101070)",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Runs ELF initialization routines by calling _init and then iterating over a function pointer array starting at 0x103de8, forwarding its three parameters to each entry."
+      },
+      "evidence": [
+        {
+          "kind": "metadata",
+          "address": null,
+          "quote": "name: __libc_csu_init",
+          "note": "standard GCC/ELF initialization wrapper referenced from _start",
+          "status": "confirmed",
+          "code": "metadata_confirmed",
+          "reason": "matches recorded function or program metadata",
+          "actual": null,
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "call",
+          "address": "0x001012bc",
+          "quote": "CALL 0x00101000",
+          "note": "calls _init",
+          "status": "confirmed",
+          "code": "call_site_confirmed",
+          "reason": "call site confirmed; it calls _init",
+          "actual": "CALL 0x00101000",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "call",
+          "address": "0x001012d9",
+          "quote": "CALL qword ptr [R12 + RBX*0x8]",
+          "note": "indirect call to init array entry",
+          "status": "confirmed",
+          "code": "call_site_confirmed",
+          "reason": "call site confirmed; it calls register_tm_clones",
+          "actual": "CALL qword ptr [R12 + RBX*0x8]",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "xref",
+          "address": "0x0010108a",
+          "quote": "DATA from 0x0010108a (_start @ 0x00101070)",
+          "note": null,
+          "status": "confirmed",
+          "code": "xref_confirmed",
+          "reason": "DATA reference to this function exists at 0x0010108a (from _start)",
+          "actual": null,
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [
+        {
+          "code": "constant_not_cited",
+          "severity": "info",
+          "message": "the claim mentions 0x103de8, which appears in the function's code but not in the verified evidence",
+          "heuristic": true
+        }
+      ],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[0]",
+      "section": "behavior",
+      "statement": "Saves callee-saved registers (R15, R14, R13, R12, RBP, RBX), aligns the stack, and preserves the three incoming arguments in R13D, R14, and R15.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x00101296",
+            "quote": "MOV R15,RDX",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x0010129b",
+            "quote": "MOV R14,RSI",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012a0",
+            "quote": "MOV R13D,EDI",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012b8",
+            "quote": "SUB RSP,0x8",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Saves callee-saved registers (R15, R14, R13, R12, RBP, RBX), aligns the stack, and preserves the three incoming arguments in R13D, R14, and R15."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x00101296",
+          "quote": "MOV R15,RDX",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV R15,RDX",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x0010129b",
+          "quote": "MOV R14,RSI",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV R14,RSI",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012a0",
+          "quote": "MOV R13D,EDI",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV R13D,EDI",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012b8",
+          "quote": "SUB RSP,0x8",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "SUB RSP,0x8",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [
+        {
+          "code": "some_evidence_is_boilerplate",
+          "severity": "info",
+          "message": "some cited instructions are prologue/epilogue boilerplate",
+          "heuristic": true
+        }
+      ],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[1]",
+      "section": "behavior",
+      "statement": "Loads the start (0x103de8) and end (0x103df0) addresses of the initialization pointer table into R12 and RBP and computes their byte difference.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012a5",
+            "quote": "LEA R12,[0x103de8]",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012ad",
+            "quote": "LEA RBP,[0x103df0]",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012b5",
+            "quote": "SUB RBP,R12",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Loads the start (0x103de8) and end (0x103df0) addresses of the initialization pointer table into R12 and RBP and computes their byte difference."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x001012a5",
+          "quote": "LEA R12,[0x103de8]",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "LEA R12,[0x103de8]",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012ad",
+          "quote": "LEA RBP,[0x103df0]",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "LEA RBP,[0x103df0]",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012b5",
+          "quote": "SUB RBP,R12",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "SUB RBP,R12",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[2]",
+      "section": "behavior",
+      "statement": "Calls _init at 0x00101000 with param_1 still in RDI/EDI.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "call",
+            "address": "0x001012bc",
+            "quote": "CALL 0x00101000",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "_init(param_1);",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Calls _init at 0x00101000 with param_1 still in RDI/EDI."
+      },
+      "evidence": [
+        {
+          "kind": "call",
+          "address": "0x001012bc",
+          "quote": "CALL 0x00101000",
+          "note": null,
+          "status": "confirmed",
+          "code": "call_site_confirmed",
+          "reason": "call site confirmed; it calls _init",
+          "actual": "CALL 0x00101000",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "_init(param_1);",
+          "note": null,
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found at decompiled code line 7; matching assembly at 0x001012bc",
+          "actual": null,
+          "missing_information": null,
+          "location": "decompiled code line 7",
+          "occurrences": 1,
+          "corroborating_addresses": [
+            "0x001012bc"
+          ]
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[3]",
+      "section": "behavior",
+      "statement": "Divides the table byte size by 8 (arithmetic right shift by 3) to get the entry count and skips the loop if the count is zero.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012c2",
+            "quote": "SAR RBP,0x3",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012c6",
+            "quote": "JZ 0x001012e6",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Divides the table byte size by 8 (arithmetic right shift by 3) to get the entry count and skips the loop if the count is zero."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x001012c2",
+          "quote": "SAR RBP,0x3",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "SAR RBP,0x3",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012c6",
+          "quote": "JZ 0x001012e6",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "JZ 0x001012e6",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [
+        {
+          "code": "constant_not_cited",
+          "severity": "info",
+          "message": "the claim mentions 8, which appears in the function's code but not in the verified evidence",
+          "heuristic": true
+        }
+      ],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[4]",
+      "section": "behavior",
+      "statement": "Loops index RBX from 0 until RBX equals RBP (1 iteration according to the decompiler and the 8-byte range), restoring the three arguments into EDI, RSI, and RDX before calling each function pointer at [R12 + RBX*0x8].",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012c8",
+            "quote": "XOR EBX,EBX",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012d0",
+            "quote": "MOV RDX,R15",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012d3",
+            "quote": "MOV RSI,R14",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012d6",
+            "quote": "MOV EDI,R13D",
+            "note": null
+          },
+          {
+            "kind": "call",
+            "address": "0x001012d9",
+            "quote": "CALL qword ptr [R12 + RBX*0x8]",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012dd",
+            "quote": "ADD RBX,0x1",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012e1",
+            "quote": "CMP RBP,RBX",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012e4",
+            "quote": "JNZ 0x001012d0",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "while (lVar1 != 1);",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Loops index RBX from 0 until RBX equals RBP (1 iteration according to the decompiler and the 8-byte range), restoring the three arguments into EDI, RSI, and RDX before calling each function pointer at [R12 + RBX*0x8]."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x001012c8",
+          "quote": "XOR EBX,EBX",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "XOR EBX,EBX",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012d0",
+          "quote": "MOV RDX,R15",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV RDX,R15",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012d3",
+          "quote": "MOV RSI,R14",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV RSI,R14",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012d6",
+          "quote": "MOV EDI,R13D",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV EDI,R13D",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "call",
+          "address": "0x001012d9",
+          "quote": "CALL qword ptr [R12 + RBX*0x8]",
+          "note": null,
+          "status": "confirmed",
+          "code": "call_site_confirmed",
+          "reason": "call site confirmed; it calls register_tm_clones",
+          "actual": "CALL qword ptr [R12 + RBX*0x8]",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012dd",
+          "quote": "ADD RBX,0x1",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "ADD RBX,0x1",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012e1",
+          "quote": "CMP RBP,RBX",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "CMP RBP,RBX",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012e4",
+          "quote": "JNZ 0x001012d0",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "JNZ 0x001012d0",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "while (lVar1 != 1);",
+          "note": null,
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found at decompiled code line 13",
+          "actual": null,
+          "missing_information": null,
+          "location": "decompiled code line 13",
+          "occurrences": 1,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [
+        {
+          "code": "constant_not_cited",
+          "severity": "info",
+          "message": "the claim mentions 0, which appears in the function's code but not in the verified evidence",
+          "heuristic": true
+        }
+      ],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "behavior[5]",
+      "section": "behavior",
+      "statement": "Restores the stack pointer and saved registers, then returns.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012e6",
+            "quote": "ADD RSP,0x8",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012f4",
+            "quote": "RET",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Restores the stack pointer and saved registers, then returns."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x001012e6",
+          "quote": "ADD RSP,0x8",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "ADD RSP,0x8",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012f4",
+          "quote": "RET",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "RET",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [
+        {
+          "code": "evidence_is_boilerplate",
+          "severity": "weak",
+          "message": "the only verified evidence is prologue/epilogue-style instructions (push/pop rbp, ret, leave, ...), which say nothing about what the function does",
+          "heuristic": true
+        }
+      ],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "PARTIALLY_VERIFIED",
+      "reasons": [
+        "not clearly supported: the only verified evidence is prologue/epilogue-style instructions (push/pop rbp, ret, leave, ...), which say nothing about what the function does"
+      ],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "inputs[0]",
+      "section": "inputs",
+      "statement": "param_1 (EVP_PKEY_CTX *): First argument (passed in RDI/EDI); forwarded to _init and truncated to 32 bits (EDI) when forwarded to each init-array function.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "parameter",
+            "address": null,
+            "quote": "param_1",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012a0",
+            "quote": "MOV R13D,EDI",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "(ulong)param_1 & 0xffffffff",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "name": "param_1",
+        "type": "EVP_PKEY_CTX *",
+        "description": "First argument (passed in RDI/EDI); forwarded to _init and truncated to 32 bits (EDI) when forwarded to each init-array function."
+      },
+      "evidence": [
+        {
+          "kind": "parameter",
+          "address": null,
+          "quote": "param_1",
+          "note": null,
+          "status": "confirmed",
+          "code": "parameter_in_code",
+          "reason": "the name appears in the decompiled code (Ghidra recorded no parameter list for this function)",
+          "actual": null,
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012a0",
+          "quote": "MOV R13D,EDI",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV R13D,EDI",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "(ulong)param_1 & 0xffffffff",
+          "note": null,
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found at decompiled code line 10; no assembly instruction or call site matches its constants or callees",
+          "actual": null,
+          "missing_information": null,
+          "location": "decompiled code line 10",
+          "occurrences": 1,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [
+        {
+          "code": "evidence_does_not_cover_claim_specifics",
+          "severity": "weak",
+          "message": "none of the claim's specifics (_init) appear in its verified evidence, so the evidence does not show what the claim says",
+          "heuristic": true
+        }
+      ],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "PARTIALLY_VERIFIED",
+      "reasons": [
+        "not clearly supported: none of the claim's specifics (_init) appear in its verified evidence, so the evidence does not show what the claim says"
+      ],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "inputs[1]",
+      "section": "inputs",
+      "statement": "param_2 (undefined8): Second argument (passed in RSI); forwarded to each init-array function.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "parameter",
+            "address": null,
+            "quote": "param_2",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x0010129b",
+            "quote": "MOV R14,RSI",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "name": "param_2",
+        "type": "undefined8",
+        "description": "Second argument (passed in RSI); forwarded to each init-array function."
+      },
+      "evidence": [
+        {
+          "kind": "parameter",
+          "address": null,
+          "quote": "param_2",
+          "note": null,
+          "status": "confirmed",
+          "code": "parameter_in_code",
+          "reason": "the name appears in the decompiled code (Ghidra recorded no parameter list for this function)",
+          "actual": null,
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x0010129b",
+          "quote": "MOV R14,RSI",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV R14,RSI",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "inputs[2]",
+      "section": "inputs",
+      "statement": "param_3 (undefined8): Third argument (passed in RDX); forwarded to each init-array function.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "parameter",
+            "address": null,
+            "quote": "param_3",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x00101296",
+            "quote": "MOV R15,RDX",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "name": "param_3",
+        "type": "undefined8",
+        "description": "Third argument (passed in RDX); forwarded to each init-array function."
+      },
+      "evidence": [
+        {
+          "kind": "parameter",
+          "address": null,
+          "quote": "param_3",
+          "note": null,
+          "status": "confirmed",
+          "code": "parameter_in_code",
+          "reason": "the name appears in the decompiled code (Ghidra recorded no parameter list for this function)",
+          "actual": null,
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x00101296",
+          "quote": "MOV R15,RDX",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "MOV R15,RDX",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "inputs[3]",
+      "section": "inputs",
+      "statement": "__frame_dummy_init_array_entry (code *[]): Array of function pointers spanning 0x103de8 to 0x103df0 read during the initialization loop.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "instruction",
+            "address": "0x001012a5",
+            "quote": "LEA R12,[0x103de8]",
+            "note": null
+          },
+          {
+            "kind": "instruction",
+            "address": "0x001012ad",
+            "quote": "LEA RBP,[0x103df0]",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "(&__frame_dummy_init_array_entry)[lVar1]",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "name": "__frame_dummy_init_array_entry",
+        "type": "code *[]",
+        "description": "Array of function pointers spanning 0x103de8 to 0x103df0 read during the initialization loop."
+      },
+      "evidence": [
+        {
+          "kind": "instruction",
+          "address": "0x001012a5",
+          "quote": "LEA R12,[0x103de8]",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "LEA R12,[0x103de8]",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "instruction",
+          "address": "0x001012ad",
+          "quote": "LEA RBP,[0x103df0]",
+          "note": null,
+          "status": "confirmed",
+          "code": "quote_matches",
+          "reason": "quote matches the instruction at this address",
+          "actual": "LEA RBP,[0x103df0]",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "(&__frame_dummy_init_array_entry)[lVar1]",
+          "note": null,
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found at decompiled code line 10",
+          "actual": null,
+          "missing_information": null,
+          "location": "decompiled code line 10",
+          "occurrences": 1,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "side_effects[0]",
+      "section": "side_effects",
+      "statement": "Invokes _init at 0x00101000 with param_1.",
+      "claimed_confidence": "high",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "call",
+            "address": "0x001012bc",
+            "quote": "CALL 0x00101000",
+            "note": null
+          },
+          {
+            "kind": "decompiled_code",
+            "address": null,
+            "quote": "_init(param_1);",
+            "note": null
+          }
+        ],
+        "confidence": "high",
+        "statement": "Invokes _init at 0x00101000 with param_1."
+      },
+      "evidence": [
+        {
+          "kind": "call",
+          "address": "0x001012bc",
+          "quote": "CALL 0x00101000",
+          "note": null,
+          "status": "confirmed",
+          "code": "call_site_confirmed",
+          "reason": "call site confirmed; it calls _init",
+          "actual": "CALL 0x00101000",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "decompiled_code",
+          "address": null,
+          "quote": "_init(param_1);",
+          "note": null,
+          "status": "confirmed",
+          "code": "fragment_confirmed",
+          "reason": "fragment found at decompiled code line 7; matching assembly at 0x001012bc",
+          "actual": null,
+          "missing_information": null,
+          "location": "decompiled code line 7",
+          "occurrences": 1,
+          "corroborating_addresses": [
+            "0x001012bc"
+          ]
+        }
+      ],
+      "evidence_status": "VERIFIED",
+      "findings": [],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "VERIFIED",
+      "reasons": [],
+      "missing_information": [],
+      "overconfident": false
+    },
+    {
+      "id": "side_effects[1]",
+      "section": "side_effects",
+      "statement": "Invokes function pointer(s) from the table at 0x103de8 via indirect call at 0x001012d9; Ghidra records frame_dummy (0x00101160) and __do_global_dtors_aux (0x00101110) as callees at this call site.",
+      "claimed_confidence": "medium",
+      "original_claim": {
+        "evidence": [
+          {
+            "kind": "call",
+            "address": "0x001012d9",
+            "quote": "CALL qword ptr [R12 + RBX*0x8]",
+            "note": null
+          },
+          {
+            "kind": "metadata",
+            "address": null,
+            "quote": "frame_dummy @ 0x00101160 | call sites: 0x001012d9",
+            "note": null
+          },
+          {
+            "kind": "metadata",
+            "address": null,
+            "quote": "__do_global_dtors_aux @ 0x00101110 | call sites: 0x001012d9",
+            "note": null
+          }
+        ],
+        "confidence": "medium",
+        "statement": "Invokes function pointer(s) from the table at 0x103de8 via indirect call at 0x001012d9; Ghidra records frame_dummy (0x00101160) and __do_global_dtors_aux (0x00101110) as callees at this call site."
+      },
+      "evidence": [
+        {
+          "kind": "call",
+          "address": "0x001012d9",
+          "quote": "CALL qword ptr [R12 + RBX*0x8]",
+          "note": null,
+          "status": "confirmed",
+          "code": "call_site_confirmed",
+          "reason": "call site confirmed; it calls register_tm_clones",
+          "actual": "CALL qword ptr [R12 + RBX*0x8]",
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "metadata",
+          "address": null,
+          "quote": "frame_dummy @ 0x00101160 | call sites: 0x001012d9",
+          "note": null,
+          "status": "uncheckable",
+          "code": "metadata_not_checkable",
+          "reason": "free-form metadata claim; it does not match any recorded metadata value",
+          "actual": null,
+          "missing_information": "no recorded metadata corresponds to this quote",
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        },
+        {
+          "kind": "metadata",
+          "address": null,
+          "quote": "__do_global_dtors_aux @ 0x00101110 | call sites: 0x001012d9",
+          "note": null,
+          "status": "confirmed",
+          "code": "metadata_confirmed",
+          "reason": "matches recorded function or program metadata",
+          "actual": null,
+          "missing_information": null,
+          "location": null,
+          "occurrences": null,
+          "corroborating_addresses": []
+        }
+      ],
+      "evidence_status": "PARTIALLY_VERIFIED",
+      "findings": [
+        {
+          "code": "constant_not_cited",
+          "severity": "info",
+          "message": "the claim mentions 0x103de8, which appears in the function's code but not in the verified evidence",
+          "heuristic": true
+        },
+        {
+          "code": "address_not_cited",
+          "severity": "info",
+          "message": "the claim mentions address 0x101160, which exists in the binary but is not cited",
+          "heuristic": true
+        },
+        {
+          "code": "claimed_callee_unknown",
+          "severity": "contradiction",
+          "message": "the claim says this function calls pointer, but no function or import named pointer exists in the extracted binary data",
+          "heuristic": true
+        }
+      ],
+      "semantic": {
+        "status": "not_assessed",
+        "method": "none",
+        "rationale": "semantic verification was not run"
+      },
+      "status": "CONTRADICTED",
+      "reasons": [
+        "evidence[1] (metadata) is uncheckable: free-form metadata claim; it does not match any recorded metadata value",
+        "contradicted by extracted data: the claim says this function calls pointer, but no function or import named pointer exists in the extracted binary data"
+      ],
+      "missing_information": [
+        "no recorded metadata corresponds to this quote"
+      ],
+      "overconfident": false
+    }
+  ],
+  "limitations": [
+    "Deterministic checks show that cited evidence exists in the extracted data and that quotes match it. They do not prove that the interpretation of that evidence is correct.",
+    "VERIFIED means: every cited item exists, matches the data, and passed basic grounding checks. It is not a guarantee that the claim is true.",
+    "Claim-level checks (layer 2) are text heuristics and can miss problems or, rarely, flag harmless wording.",
+    "The extracted data covers direct calls only; indirect calls Ghidra could not resolve are unknown, so callee and caller claims are only contradicted when the call data is complete.",
+    "Notes written by the model next to evidence are never verified.",
+    "Semantic verification (layer 3) was not run."
+  ]
+}

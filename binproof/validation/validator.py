@@ -18,6 +18,7 @@ from .models import (
     ValidationSummary, severity, worst,
 )
 from .semantic import SemanticVerifier, semantic_floor
+from .text import compact
 from .support import SupportChecker
 
 LIMITATIONS = [
@@ -40,13 +41,19 @@ def aggregate_evidence(checks: Sequence[EvidenceCheck]) -> Tuple[C, List[str], L
     """Layer-1 claim status from its evidence checks: (status, reasons, missing information)."""
     if not checks:
         return C.UNVERIFIED, ["no supporting evidence was provided"], ["supporting evidence for this claim"]
-    reasons, missing = [], []
+    reasons, missing, seen, unique = [], [], set(), []
     for i, c in enumerate(checks):
+        key = (c.kind, c.address, compact(c.quote))
+        if key in seen:        # the same evidence cited twice counts once
+            continue
+        seen.add(key)
+        unique.append(c)
         if c.status is not S.CONFIRMED:
             where = " @ %s" % c.address if c.address else ""
             reasons.append("evidence[%d] (%s%s) is %s: %s" % (i, c.kind.value, where, c.status.value, c.reason))
         if c.missing_information:
             missing.append(c.missing_information)
+    checks = unique
     bad = [c for c in checks if c.status in (S.NOT_FOUND, S.MISMATCH)]
     confirmed = sum(c.status is S.CONFIRMED for c in checks)
     partial = sum(c.status is S.PARTIAL for c in checks)
@@ -153,7 +160,8 @@ class RecordValidator:
         if reproduced is False:
             notes.append("the exact input the model saw cannot be reproduced (the export changed, or non-default "
                          "context limits were used); evidence is checked against the current export")
-        return Integrity(binary_matches=matches, context_reproduced=reproduced, notes=notes)
+        return Integrity(ok=matches is not False, binary_matches=matches, context_reproduced=reproduced,
+                         notes=notes)
 
     # ---- summary ---------------------------------------------------------------------------------------
 
